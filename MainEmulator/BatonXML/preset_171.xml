@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preset href="/presets/171" product="Elemental Server + Audio Normalization Package + Audio Package + HEVC Package" version="2.11.1.400416">
+  <name>DIRECTV_4K_24P_12M</name>
+  <permalink>directv_4k_24p_12m</permalink>
+  <description>Created by JL 08/28/2017 No Null</description>
+  <preset_category href="/preset_categories/11">DIRECTV</preset_category>
+  <container>m2ts</container>
+  <m2ts_settings>
+    <arib>false</arib>
+    <audio_frames_per_pes>2</audio_frames_per_pes>
+    <bitrate>0</bitrate>
+    <cc_in_pmt>false</cc_in_pmt>
+    <drop_absent_streams>false</drop_absent_streams>
+    <dvb>true</dvb>
+    <es_rate>false</es_rate>
+    <null_packet_bitrate nil="true"/>
+    <pat_interval>125</pat_interval>
+    <pcr_every_pes>true</pcr_every_pes>
+    <pcr_period nil="true"/>
+    <pmt_interval>125</pmt_interval>
+    <program_num nil="true"/>
+    <scte35_pullup>0</scte35_pullup>
+    <segmentation_markers>none</segmentation_markers>
+    <segmentation_style>maintain_cadence</segmentation_style>
+    <segmentation_time nil="true"/>
+    <transport_stream_id nil="true"/>
+    <use_atsc_stream_type>false</use_atsc_stream_type>
+    <vbr>true</vbr>
+    <dvb_sdt_settings>
+      <output_sdt>sdt_follow</output_sdt>
+      <rep_interval>500</rep_interval>
+      <service_name></service_name>
+      <service_provider_name></service_provider_name>
+    </dvb_sdt_settings>
+    <audio_pids>482</audio_pids>
+    <klv_data_pids>501</klv_data_pids>
+    <dvb_sub_pids>460-479</dvb_sub_pids>
+    <dvb_teletext_pid>499</dvb_teletext_pid>
+    <ecm_pid>506</ecm_pid>
+    <etv_platform_pid>504</etv_platform_pid>
+    <etv_signal_pid>505</etv_signal_pid>
+    <pmt_pid>480</pmt_pid>
+    <private_metadata_pid>503</private_metadata_pid>
+    <scte35_pid>500</scte35_pid>
+    <scte35_esam_pid>508</scte35_esam_pid>
+    <timed_metadata_pid>502</timed_metadata_pid>
+    <video_pid>481</video_pid>
+    <arib_captions_pid>507</arib_captions_pid>
+  </m2ts_settings>
+  <log_edit_points>false</log_edit_points>
+  <video_description>
+    <afd_signaling>None</afd_signaling>
+    <anti_alias>true</anti_alias>
+    <drop_frame_timecode>true</drop_frame_timecode>
+    <fixed_afd nil="true"/>
+    <force_cpu_encode>false</force_cpu_encode>
+    <height>2160</height>
+    <insert_color_metadata>false</insert_color_metadata>
+    <respond_to_afd>None</respond_to_afd>
+    <sharpness>50</sharpness>
+    <stretch_to_output>false</stretch_to_output>
+    <timecode_passthrough>false</timecode_passthrough>
+    <vbi_passthrough>false</vbi_passthrough>
+    <width>3840</width>
+    <h265_settings>
+      <adaptive_quantization>off</adaptive_quantization>
+      <alt_xfer_func_sei>false</alt_xfer_func_sei>
+      <bitrate>12000000</bitrate>
+      <buf_fill_pct nil="true"/>
+      <buf_size>25000000</buf_size>
+      <flicker_aq>false</flicker_aq>
+      <framerate_denominator nil="true"/>
+      <framerate_follow_source>true</framerate_follow_source>
+      <framerate_numerator nil="true"/>
+      <gop_b_reference>false</gop_b_reference>
+      <gop_closed_cadence>1</gop_closed_cadence>
+      <gop_num_b_frames>2</gop_num_b_frames>
+      <gop_size>48.0</gop_size>
+      <gop_size_units>frames</gop_size_units>
+      <interpolate_frc>false</interpolate_frc>
+      <look_ahead_rate_control>high</look_ahead_rate_control>
+      <max_bitrate>18000000</max_bitrate>
+      <min_i_interval>0</min_i_interval>
+      <num_ref_frames>1</num_ref_frames>
+      <par_denominator>1</par_denominator>
+      <par_follow_source>false</par_follow_source>
+      <par_numerator>1</par_numerator>
+      <passes>2</passes>
+      <qp nil="true"/>
+      <scd>true</scd>
+      <slices>1</slices>
+      <slow_pal>false</slow_pal>
+      <spatial_aq>false</spatial_aq>
+      <svq>0</svq>
+      <telecine>None</telecine>
+      <temporal_aq>false</temporal_aq>
+      <temporal_ids>false</temporal_ids>
+      <tiles>false</tiles>
+      <profile>Main10/High</profile>
+      <rate_control_mode>VBR</rate_control_mode>
+      <gop_mode>fixed</gop_mode>
+      <interlace_mode>progressive</interlace_mode>
+    </h265_settings>
+    <selected_gpu nil="true"/>
+    <codec>h.265</codec>
+  </video_description>
+  <audio_description>
+    <audio_type>0</audio_type>
+    <follow_input_audio_type>false</follow_input_audio_type>
+    <follow_input_language_code>false</follow_input_language_code>
+    <language_code>eng</language_code>
+    <order>1</order>
+    <stream_name nil="true"/>
+    <timecode_passthrough>false</timecode_passthrough>
+    <pass_through_settings>
+      <name>pass_through_settings</name>
+    </pass_through_settings>
+    <codec>pass through</codec>
+  </audio_description>
+  <caption_description>
+    <destination_type>Embedded</destination_type>
+    <language_code nil="true"/>
+    <language_description nil="true"/>
+    <order>1</order>
+  </caption_description>
+</preset>

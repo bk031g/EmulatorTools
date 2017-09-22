@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=None">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body  { background: #f8f8f8; }
+body .c { color: #408080; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #008000; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+body .cp { color: #BC7A00 } /* Comment.Preproc */
+body .c1 { color: #408080; font-style: italic } /* Comment.Single */
+body .cs { color: #408080; font-style: italic } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #808080 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0040D0 } /* Generic.Traceback */
+body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+body .kp { color: #008000 } /* Keyword.Pseudo */
+body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #B00040 } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BA2121 } /* Literal.String */
+body .na { color: #7D9029 } /* Name.Attribute */
+body .nb { color: #008000 } /* Name.Builtin */
+body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #0000FF } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #19177C } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BA2121 } /* Literal.String.Backtick */
+body .sc { color: #BA2121 } /* Literal.String.Char */
+body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BA2121 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BA2121 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BA2121 } /* Literal.String.Single */
+body .ss { color: #19177C } /* Literal.String.Symbol */
+body .bp { color: #008000 } /* Name.Builtin.Pseudo */
+body .vc { color: #19177C } /* Name.Variable.Class */
+body .vg { color: #19177C } /* Name.Variable.Global */
+body .vi { color: #19177C } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight"><pre><span class="c">/**</span>
+<span class="c">* This is a part of the BATON product.</span>
+<span class="c">* Copyright (c) Interra Systems Inc.  All rights reserved.</span>
+<span class="c">*</span>
+<span class="c">* This source code is only intended as a supplement to the BATON API Reference</span>
+<span class="c">* and related electronic documentation provided with BATON.</span>
+<span class="c">* See these sources for detailed information regarding the BATON product.</span>
+<span class="c">*/</span>
+
+
+<span class="k">import</span> <span class="nn">java.net.MalformedURLException</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">java.util.Vector</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="k">import</span> <span class="nn">org.apache.xmlrpc.*</span><span class="o">;</span>
+
+<span class="c">/**</span>
+<span class="c"> * This simple application demonstrates how to connect to Baton Application</span>
+<span class="c"> * using Baton XMLRPC API.</span>
+<span class="c"> *</span>
+<span class="c"> * The application uses Helma&#39;s XMLRPC library for Java.</span>
+<span class="c"> *</span>
+<span class="c"> * See comments below to understand the details of this program.</span>
+<span class="c"> *</span>
+<span class="c"> * @author Shailesh</span>
+<span class="c"> *</span>
+<span class="c"> */</span>
+<span class="k">class</span> <span class="nc">Connect</span>
+<span class="o">{</span>
+	<span class="c">//! The URL of Baton Application (http://ip_address:port)</span>
+	<span class="k">public</span> <span class="k">static</span> <span class="k">final</span> <span class="n">String</span> <span class="n">BATON_URL</span>  <span class="o">=</span> <span class="s">&quot;http://localhost:8080&quot;</span><span class="o">;</span>
+	<span class="c">//! User Name (for authentication)</span>
+	<span class="k">public</span> <span class="k">static</span> <span class="k">final</span> <span class="n">String</span> <span class="n">USERNAME</span>  <span class="o">=</span> <span class="s">&quot;admin&quot;</span><span class="o">;</span>
+	<span class="c">//! Password (for authentication)</span>
+	<span class="k">public</span> <span class="k">static</span> <span class="k">final</span> <span class="n">String</span> <span class="n">PASSWORD</span> <span class="o">=</span> <span class="s">&quot;admin&quot;</span><span class="o">;</span>
+	<span class="k">public</span> <span class="k">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="n">args</span><span class="o">[])</span>
+	<span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Testing BATON XMLRPC API.&quot;</span><span class="o">);</span>
+		<span class="k">try</span>
+		<span class="o">{</span>
+			<span class="c">//! We create an instance of XmlRpcClient class and pass on the Baton application URL to it</span>
+			<span class="n">XmlRpcClient</span> <span class="n">baton</span> <span class="o">=</span> <span class="k">new</span> <span class="n">XmlRpcClient</span><span class="o">(</span><span class="n">BATON_URL</span><span class="o">);</span>
+			<span class="c">//! We specify the user name and password which will be used for HTTP Basic Authentication</span>
+			<span class="c">//! during XMLRPC calls</span>
+			<span class="n">baton</span><span class="o">.</span><span class="na">setBasicAuthentication</span><span class="o">(</span><span class="n">USERNAME</span><span class="o">,</span> <span class="n">PASSWORD</span><span class="o">);</span>
+			<span class="c">//! We create a vector in which parameters for XMLRPC calls will be stored.</span>
+			<span class="n">Vector</span> <span class="n">parameters</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Vector</span><span class="o">();</span>
+			<span class="c">//! for the following calls, the vector is empty</span>
+			<span class="c">//! We execute the call Baton.contents and get the result. The result is a list</span>
+			<span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">baton</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">&quot;Baton.contents&quot;</span><span class="o">,</span> <span class="n">parameters</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">result</span> <span class="k">instanceof</span> <span class="n">List</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Result is a list.&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="c">//! We print the result</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+			<span class="c">//! We try to query the edition of Baton application that is running at the moment</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">baton</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">&quot;Baton.edition&quot;</span><span class="o">,</span> <span class="n">parameters</span><span class="o">);</span>
+			<span class="c">//! Result is a String</span>
+			<span class="c">//! Lets print the result</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">MalformedURLException</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="c">/**</span>
+<span class="c">			 * This exception would be thrown during the creation of XmlRpcClient.</span>
+<span class="c">			 * This means that the URL passed is not a well formed URL.</span>
+<span class="c">			 */</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;URL of BATON Application is invalid.&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="c">/**</span>
+<span class="c">			 * This exception is typically thrown if Client is not able to make a connection</span>
+<span class="c">			 * with the Baton applicaiton (XMLRPC Server).</span>
+<span class="c">			 */</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Couldn&#39;t connect to Baton XMLRPC Server.&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="n">XmlRpcException</span> <span class="n">e</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="c">/**</span>
+<span class="c">			 * This exception is thrown if the XMLRPC call has any problems.</span>
+<span class="c">			 */</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Problem with XMLRPC method call.&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+<span class="o">}</span>
+</pre></div>
+</body>
+</html>
