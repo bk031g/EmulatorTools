@@ -8,6 +8,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 public class AtemeTranscode{
 	
@@ -19,6 +24,7 @@ public class AtemeTranscode{
 	private String jobState;
 	private String jobName;
 	private String jobPriority;
+	Document document;
 	
 	private String jobID;
 	private String jobURL;
@@ -96,7 +102,20 @@ public class AtemeTranscode{
 		postPriority(jobPriority);
 		postJobState(jobState);
 		
-		System.out.println(jobID);
+		fetchXML();
+        
+        System.out.println(document.getRootElement().getChildText("state"));
+        System.out.println(document.getRootElement().getChildText("name"));
+        
+	}
+	
+	void fetchXML(){
+		SAXBuilder saxBuilder = new SAXBuilder();
+        try {
+			document = saxBuilder.build(jobURL);
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@SuppressWarnings("unused")

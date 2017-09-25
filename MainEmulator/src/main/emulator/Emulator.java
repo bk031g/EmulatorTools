@@ -140,6 +140,8 @@ public class Emulator extends JFrame {
 	private JSpinner spinner_2;
 	private JButton btnAtemeInput;
 	
+	private ArrayList<JobConductor> JobList = new ArrayList<JobConductor>();
+	
 	
 	
 	
@@ -1137,6 +1139,10 @@ public class Emulator extends JFrame {
 			}
 		}
 
+		JobConductor initConductor = new JobConductor();
+		JobList.add(initConductor);
+		Thread conductorThread = new Thread(initConductor);
+		
 		if (!missingField) {
 
 			for (TreePath path : tree.getSelectionPaths()) {
@@ -1160,9 +1166,6 @@ public class Emulator extends JFrame {
 
 					for (String Preset : selectedPresets) {
 
-						JobConductor initConductor = new JobConductor();
-						Thread conductorThread = new Thread(initConductor);
-
 						String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")";
 						String jobName = textField_2.getText().trim().equals("") ? fillerName : textField_2.getText();
 						String ipAddr = (String) textField_AtemeIP.getSelectedItem();
@@ -1184,7 +1187,6 @@ public class Emulator extends JFrame {
 						initConductor.atemeTC.setJobName(jobName);
 						initConductor.atemeTC.setJobPriority(jobPriority);
 
-						conductorThread.start();
 					}
 				}
 
@@ -1203,19 +1205,17 @@ public class Emulator extends JFrame {
 						
 						System.out.println(TestPlan);
 
-						JobConductor initConductor = new JobConductor();
-						Thread conductorThread = new Thread(initConductor);
-
 						initConductor.setBatonQCEnabled(true);
 						initConductor.batonQC.setIpAddr((String) textField_BatonIP.getSelectedItem());
 						initConductor.batonQC.setPriority(Priority);
-						initConductor.batonQC.setSelectedDirectory(selectedDirectory);
+						if (!atemeTCEnabled)
+							initConductor.batonQC.setSelectedDirectory(selectedDirectory);
 						initConductor.batonQC.setTestPlan(TestPlan);
 						initConductor.batonQC.setTestPlanVersion(TestPlanVersion);
 						
-						conductorThread.start();
 					}
 				}
+				conductorThread.start();
 			}
 		}
 	}
