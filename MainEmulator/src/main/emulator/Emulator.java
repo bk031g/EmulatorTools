@@ -1138,10 +1138,6 @@ public class Emulator extends JFrame {
 				missingField = true;
 			}
 		}
-
-		JobConductor initConductor = new JobConductor();
-		JobList.add(initConductor);
-		Thread conductorThread = new Thread(initConductor);
 		
 		if (!missingField) {
 
@@ -1153,6 +1149,8 @@ public class Emulator extends JFrame {
 			}
 
 			for (String iterateDirectory : selectedDirectories) {
+				
+				
 				if (atemeTCEnabled) {
 
 					List<String> selectedPresets = new ArrayList<String>();
@@ -1165,19 +1163,22 @@ public class Emulator extends JFrame {
 					System.out.println(jobPriority);
 
 					for (String Preset : selectedPresets) {
+						
+						JobConductor initConductor = new JobConductor();
+						JobList.add(initConductor);
+						Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
 
-						String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")";
+						String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")"+".ts";
 						String jobName = textField_2.getText().trim().equals("") ? fillerName : textField_2.getText();
 						String ipAddr = (String) textField_AtemeIP.getSelectedItem();
 						String jobPreset = Preset;
 						String jobInput = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
 						String jobSegmentNumber = "1";
-						String jobOutput = textField_1.getText().trim().equals("") ? fillerName : textField.getText() + "\\" + textField_1.getText();
+						String jobOutput = textField_1.getText().trim().equals("") ? textField.getText() + "\\" + fillerName : textField.getText() + "\\" + textField_1.getText();
 						String jobState = "pending";
 						
 						
 						initConductor.setAtemeTCEnabled(true);
-
 						initConductor.atemeTC.setIpAddr(ipAddr);
 						initConductor.atemeTC.setJobPreset(jobPreset);
 						initConductor.atemeTC.setJobInput(jobInput);
@@ -1186,37 +1187,47 @@ public class Emulator extends JFrame {
 						initConductor.atemeTC.setJobState(jobState);
 						initConductor.atemeTC.setJobName(jobName);
 						initConductor.atemeTC.setJobPriority(jobPriority);
-
+						
+						if (batonQCEnabled){
+							conductBaton(jobOutput);
+						}
+						
+						conductorThread.start();
 					}
 				}
-
-				if (batonQCEnabled) {
-
-					List<String> selectedTestPlans = new ArrayList<String>();
-					if (chckbxManualTestplanEntry.isSelected()) {
-						selectedTestPlans.add(textField_4.getText());
-					} else
-						selectedTestPlans = list_TestPlan.getSelectedValuesList();
-
-					String Priority = (String) spinner.getValue();
+				
+				else if (batonQCEnabled) {
+					JobConductor initConductor = new JobConductor();
+					JobList.add(initConductor);
+					Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
 					String selectedDirectory = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
-
-					for (String TestPlan : selectedTestPlans) {
-						
-						System.out.println(TestPlan);
-
-						initConductor.setBatonQCEnabled(true);
-						initConductor.batonQC.setIpAddr((String) textField_BatonIP.getSelectedItem());
-						initConductor.batonQC.setPriority(Priority);
-						if (!atemeTCEnabled)
-							initConductor.batonQC.setSelectedDirectory(selectedDirectory);
-						initConductor.batonQC.setTestPlan(TestPlan);
-						initConductor.batonQC.setTestPlanVersion(TestPlanVersion);
-						
-					}
+					conductBaton(selectedDirectory);
+					conductorThread.start();
 				}
-				conductorThread.start();
 			}
+		}
+	}
+	
+	private void conductBaton(String iterateDirectory){
+		List<String> selectedTestPlans = new ArrayList<String>();
+		if (chckbxManualTestplanEntry.isSelected()) {
+			selectedTestPlans.add(textField_4.getText());
+		} else
+			selectedTestPlans = list_TestPlan.getSelectedValuesList();
+
+		String Priority = (String) spinner.getValue();
+		
+		for (String TestPlan : selectedTestPlans) {
+			
+			System.out.println(TestPlan);
+			System.out.println((String) textField_BatonIP.getSelectedItem());
+
+			JobList.get(JobList.size()-1).setBatonQCEnabled(true);
+			JobList.get(JobList.size()-1).batonQC.setIpAddr((String) textField_BatonIP.getSelectedItem());
+			JobList.get(JobList.size()-1).batonQC.setPriority(Priority);
+			JobList.get(JobList.size()-1).batonQC.setSelectedDirectory(iterateDirectory);
+			JobList.get(JobList.size()-1).batonQC.setTestPlan(TestPlan);
+			JobList.get(JobList.size()-1).batonQC.setTestPlanVersion(TestPlanVersion);
 		}
 	}
 	
