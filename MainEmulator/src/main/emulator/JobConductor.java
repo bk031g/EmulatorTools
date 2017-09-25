@@ -1,9 +1,6 @@
 package main.emulator;
 
 import java.io.IOException;
-import java.util.List;
-
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,7 +13,6 @@ public class JobConductor implements Runnable{
 	private boolean BatonQCEnabled;
 	private boolean BatonHCEnabled;
 	private boolean ElementalTCEnabled;
-	
 	private Timer timer = new Timer();
 	
 	public AtemeTranscode atemeTC = new AtemeTranscode();
@@ -52,15 +48,11 @@ public class JobConductor implements Runnable{
 	class delayBatonQC extends TimerTask {
 	    public void run() {
 	    	atemeTC.fetchXML();
-	    	System.out.println(atemeTC.document.getRootElement().getAttributeValue("uuid"));
 	    	System.out.println(atemeTC.document.getRootElement().getChildText("state"));
 	    	if (atemeTC.document.getRootElement().getChildText("state").equals("complete")){
-	    		System.out.println("done");
-	    		batonQC.setSelectedDirectory(atemeTC.document.getRootElement().getChild("output").getChildText("path"));
 	    		try {
 					batonQC.run();
 				} catch (XmlRpcException | IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	        	timer.cancel();
@@ -76,23 +68,21 @@ public class JobConductor implements Runnable{
 	public void run(){
 		
 		if(AtemeTCEnabled == true && BatonQCEnabled == true){
-			
 			atemeTC.run();
 			delayBatonQC(5000);
 		} 
-		/*
-		if(BatonQCEnabled == true) {
+		else if(BatonQCEnabled == true){
 			try {
 				batonQC.run();
-			} catch (XmlRpcException | IOException e) 
+			} catch (XmlRpcException | IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		if(AtemeTCEnabled == true){
+		else if(AtemeTCEnabled == true){
 			atemeTC.run();
 		}
-		*/
+		
+		
 	}
 	
 
