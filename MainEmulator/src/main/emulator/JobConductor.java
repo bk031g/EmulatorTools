@@ -17,6 +17,7 @@ public class JobConductor implements Runnable{
 	
 	public AtemeTranscode atemeTC = new AtemeTranscode();
 	public BatonFullQC batonQC = new BatonFullQC();
+	public BatonFullQC batonHC = new BatonFullQC();
 	
 	
 	
@@ -66,6 +67,14 @@ public class JobConductor implements Runnable{
 	
 	
 	public void run(){
+		
+		if(BatonHCEnabled == true){
+			try {
+				batonHC.run();
+			} catch (XmlRpcException | IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		if(AtemeTCEnabled == true && BatonQCEnabled == true){
 			atemeTC.run();

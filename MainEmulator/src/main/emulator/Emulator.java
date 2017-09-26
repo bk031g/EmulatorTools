@@ -16,6 +16,7 @@ import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
@@ -60,6 +61,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.JTable;
 
 /**
  *
@@ -141,6 +143,8 @@ public class Emulator extends JFrame {
 	private JButton btnAtemeInput;
 	
 	private ArrayList<JobConductor> JobList = new ArrayList<JobConductor>();
+	private JPanel panel_JobTracker;
+	private JTable table;
 	
 	
 	
@@ -759,7 +763,16 @@ public class Emulator extends JFrame {
 		fullQCPanel.setLayout(gl_panel_1);
 
 		chckbxBatonHeader = new JCheckBox("Baton Header");
-		chckbxBatonHeader.setEnabled(false);
+		
+		chckbxBatonHeader.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (chckbxBatonHeader.isSelected()) {
+					setPanelEnabled(0, true);
+				} else
+					setPanelEnabled(0, false);
+			}
+		});
+		
 
 		chckbxAtemeTranscode = new JCheckBox("ATEME Transcode");
 		chckbxAtemeTranscode.addActionListener(new ActionListener() {
@@ -1043,6 +1056,36 @@ public class Emulator extends JFrame {
 		contentPane.add(tabbedPane);
 		contentPane.add(tabbedPane);
 		
+		panel_JobTracker = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_JobTracker, null);
+		
+		JPanel panel_1 = new JPanel();
+		GroupLayout gl_panel_JobTracker = new GroupLayout(panel_JobTracker);
+		gl_panel_JobTracker.setHorizontalGroup(
+			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_JobTracker.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(778, Short.MAX_VALUE))
+		);
+		gl_panel_JobTracker.setVerticalGroup(
+			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_JobTracker.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(621, Short.MAX_VALUE))
+		);
+		
+		DefaultTableModel dm = new DefaultTableModel();
+	    dm.setDataVector(new Object[][] { { "button 1", "foo" },
+	        { "button 2", "bar" } }, new Object[] { "Button", "String" });
+
+	    JTable table = new JTable(dm);
+	    
+	    
+		panel_1.add(table);
+		panel_JobTracker.setLayout(gl_panel_JobTracker);
+		
 
 		panel_2 = new JPanel();
 		tabbedPane.addTab("Grid Management", null, panel_2, null);
@@ -1120,6 +1163,7 @@ public class Emulator extends JFrame {
 
 		boolean atemeTCEnabled = false;
 		boolean batonQCEnabled = false;
+		boolean batonHCEnabled = false;
 		boolean missingField = false;
 
 		if (tree.isSelectionEmpty()) {
@@ -1138,6 +1182,12 @@ public class Emulator extends JFrame {
 				missingField = true;
 			}
 		}
+		if (chckbxBatonHeader.isSelected()) {
+			batonHCEnabled = true;
+			if (!fieldCheckBatonHC()) {
+				missingField = true;
+			}
+		}
 		
 		if (!missingField) {
 
@@ -1150,6 +1200,7 @@ public class Emulator extends JFrame {
 
 			for (String iterateDirectory : selectedDirectories) {
 				
+				boolean singleHeaderCheck = true;
 				
 				if (atemeTCEnabled) {
 
@@ -1167,15 +1218,29 @@ public class Emulator extends JFrame {
 						JobConductor initConductor = new JobConductor();
 						JobList.add(initConductor);
 						Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
-
+						
+						if (batonHCEnabled && singleHeaderCheck) {
+							String selectedDirectory = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
+							conductBatonHeader(selectedDirectory);
+							singleHeaderCheck = false;
+						}
+						
 						String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")"+".ts";
 						String jobName = textField_2.getText().trim().equals("") ? fillerName : textField_2.getText();
 						String ipAddr = (String) textField_AtemeIP.getSelectedItem();
 						String jobPreset = Preset;
 						String jobInput = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
 						String jobSegmentNumber = "1";
-						String jobOutput = textField_1.getText().trim().equals("") ? textField.getText() + "\\" + fillerName : textField.getText() + "\\" + textField_1.getText();
 						String jobState = "pending";
+						
+						String jobOutput;
+						String outputFolder = textField.getText();
+						if (textField.getText().endsWith("\\"))
+							outputFolder = textField.getText().substring(0, textField.getText().length() - 1);
+						if(textField_1.getText().trim().equals(""))
+							jobOutput = outputFolder + "\\" + fillerName;
+						else 
+							jobOutput = outputFolder + "\\" + textField_1.getText()+".ts";
 						
 						
 						initConductor.setAtemeTCEnabled(true);
@@ -1196,13 +1261,24 @@ public class Emulator extends JFrame {
 					}
 				}
 				
-				else if (batonQCEnabled) {
-					JobConductor initConductor = new JobConductor();
-					JobList.add(initConductor);
-					Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
-					String selectedDirectory = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
-					conductBaton(selectedDirectory);
-					conductorThread.start();
+				else {
+					
+					if (batonHCEnabled) {
+						JobConductor initConductor = new JobConductor();
+						JobList.add(initConductor);
+						Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
+						String selectedDirectory = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
+						conductBatonHeader(selectedDirectory);
+						conductorThread.start();
+					}
+					if (batonQCEnabled){
+						JobConductor initConductor = new JobConductor();
+						JobList.add(initConductor);
+						Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
+						String selectedDirectory = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
+						conductBaton(selectedDirectory);
+						conductorThread.start();
+					}
 				}
 			}
 		}
@@ -1219,9 +1295,6 @@ public class Emulator extends JFrame {
 		
 		for (String TestPlan : selectedTestPlans) {
 			
-			System.out.println(TestPlan);
-			System.out.println((String) textField_BatonIP.getSelectedItem());
-
 			JobList.get(JobList.size()-1).setBatonQCEnabled(true);
 			JobList.get(JobList.size()-1).batonQC.setIpAddr((String) textField_BatonIP.getSelectedItem());
 			JobList.get(JobList.size()-1).batonQC.setPriority(Priority);
@@ -1229,6 +1302,18 @@ public class Emulator extends JFrame {
 			JobList.get(JobList.size()-1).batonQC.setTestPlan(TestPlan);
 			JobList.get(JobList.size()-1).batonQC.setTestPlanVersion(TestPlanVersion);
 		}
+	}
+	
+	private void conductBatonHeader(String iterateDirectory){
+		String selectedTestPlan = txtCmsprofiler.getSelectedItem().toString();
+		String Priority = (String) spinner.getValue();
+			
+			JobList.get(JobList.size()-1).setBatonHCEnabled(true);
+			JobList.get(JobList.size()-1).batonHC.setIpAddr(textField_BatonHeaderIP.getSelectedItem().toString());
+			JobList.get(JobList.size()-1).batonHC.setPriority(Priority);
+			JobList.get(JobList.size()-1).batonHC.setSelectedDirectory(iterateDirectory);
+			JobList.get(JobList.size()-1).batonHC.setTestPlan(selectedTestPlan);
+			JobList.get(JobList.size()-1).batonHC.setTestPlanVersion(TestPlanVersion);
 	}
 	
 		/*
@@ -1260,7 +1345,18 @@ public class Emulator extends JFrame {
 			return true;
 	}
 	
-		
+	private boolean fieldCheckBatonHC(){
+		if (textField_BatonHeaderIP.getSelectedItem().toString().isEmpty()){
+			JOptionPane.showMessageDialog(frame, "Select Baton Header IP.");
+			return false;
+		}
+		else if (txtCmsprofiler.getSelectedItem().toString().isEmpty()){
+			JOptionPane.showMessageDialog(frame, "Select Baton Header Test Plan.");
+			return false;
+		}
+		else
+			return true;
+	}
 	
 	/*
 	 * Auto-Populate 
