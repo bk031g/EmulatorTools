@@ -148,7 +148,7 @@ public class Emulator extends JFrame {
 	private ArrayList<JobConductor> JobList = new ArrayList<JobConductor>();
 	private JPanel panel_JobTracker;
 	private JTable table;
-	private JPanel panel_1;
+	private JPanel panelJobTrack;
 	private JTable table_1;
 	
 	
@@ -786,7 +786,6 @@ public class Emulator extends JFrame {
 		
 
 		chckbxAtemeTranscode = new JCheckBox("ATEME Transcode");
-		chckbxAtemeTranscode.setBackground(Color.RED);
 		chckbxAtemeTranscode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (chckbxAtemeTranscode.isSelected()) {
@@ -1071,25 +1070,24 @@ public class Emulator extends JFrame {
 		panel_JobTracker = new JPanel();
 		tabbedPane.addTab("New tab", null, panel_JobTracker, null);
 		
-		panel_1 = new JPanel();
+		panelJobTrack = new JPanel();
 		GroupLayout gl_panel_JobTracker = new GroupLayout(panel_JobTracker);
 		gl_panel_JobTracker.setHorizontalGroup(
 			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_JobTracker.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 584, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(455, Short.MAX_VALUE))
+					.addComponent(panelJobTrack, GroupLayout.DEFAULT_SIZE, 1021, Short.MAX_VALUE)
+					.addGap(18))
 		);
 		gl_panel_JobTracker.setVerticalGroup(
 			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_JobTracker.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 439, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(384, Short.MAX_VALUE))
+					.addComponent(panelJobTrack, GroupLayout.PREFERRED_SIZE, 746, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(77, Short.MAX_VALUE))
 		);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		panel_1.add(scrollPane_2);
 		
 		
 		DefaultTableModel jobModel = new DefaultTableModel();
@@ -1102,8 +1100,24 @@ public class Emulator extends JFrame {
 		
 		table_1 = new JTable();
 		table_1.setModel(jobModel);
-		table_1.getColumnModel().getColumn(1).setPreferredWidth(80);
+		table_1.getColumnModel().getColumn(0).setPreferredWidth(400);
 		scrollPane_2.setViewportView(table_1);
+		GroupLayout gl_panelJobTrack = new GroupLayout(panelJobTrack);
+		gl_panelJobTrack.setHorizontalGroup(
+			gl_panelJobTrack.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelJobTrack.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_panelJobTrack.setVerticalGroup(
+			gl_panelJobTrack.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelJobTrack.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(333, Short.MAX_VALUE))
+		);
+		panelJobTrack.setLayout(gl_panelJobTrack);
 		panel_JobTracker.setLayout(gl_panel_JobTracker);
 		
 		panel_2 = new JPanel();
