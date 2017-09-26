@@ -21,48 +21,33 @@ public class JobConductor implements Runnable{
 	
 	
 	
-	public boolean isAtemeTCEnabled() {
-		return AtemeTCEnabled;
-	}
 	public void setAtemeTCEnabled(boolean atemeTCEnabled) {
 		AtemeTCEnabled = atemeTCEnabled;
-	}
-	public boolean isBatonQCEnabled() {
-		return BatonQCEnabled;
 	}
 	public void setBatonQCEnabled(boolean batonQCEnabled) {
 		BatonQCEnabled = batonQCEnabled;
 	}
-	public boolean isBatonHCEnabled() {
-		return BatonHCEnabled;
-	}
 	public void setBatonHCEnabled(boolean batonHCEnabled) {
 		BatonHCEnabled = batonHCEnabled;
-	}
-	public boolean isElementalTCEnabled() {
-		return ElementalTCEnabled;
 	}
 	public void setElementalTCEnabled(boolean elementalTCEnabled) {
 		ElementalTCEnabled = elementalTCEnabled;
 	}
 	
+	
 	class delayBatonQC extends TimerTask {
-	    public void run() {
-	    	atemeTC.fetchXML();
-	    	System.out.println(atemeTC.document.getRootElement().getChildText("state"));
-	    	if (atemeTC.document.getRootElement().getChildText("state").equals("complete")){
-	    		try {
+		public void run() {
+			atemeTC.fetchXML();
+			System.out.println(atemeTC.document.getRootElement().getChildText("state"));
+			if (atemeTC.document.getRootElement().getChildText("state").equals("complete")) {
+				try {
 					batonQC.run();
 				} catch (XmlRpcException | IOException e) {
 					e.printStackTrace();
 				}
-	        	timer.cancel();
-	        }
-	    }
-	}
-	
-	private void delayBatonQC(int pingInterval){
-		timer.schedule(new delayBatonQC(), 0, pingInterval);
+				timer.cancel();
+			}
+		}
 	}
 	
 	
@@ -78,7 +63,7 @@ public class JobConductor implements Runnable{
 		
 		if(AtemeTCEnabled == true && BatonQCEnabled == true){
 			atemeTC.run();
-			delayBatonQC(5000);
+			timer.schedule(new delayBatonQC(), 0, 5000);
 		} 
 		else if(BatonQCEnabled == true){
 			try {
@@ -90,8 +75,6 @@ public class JobConductor implements Runnable{
 		else if(AtemeTCEnabled == true){
 			atemeTC.run();
 		}
-		
-		
 	}
 	
 

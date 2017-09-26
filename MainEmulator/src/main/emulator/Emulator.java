@@ -62,6 +62,9 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.JTable;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -145,6 +148,8 @@ public class Emulator extends JFrame {
 	private ArrayList<JobConductor> JobList = new ArrayList<JobConductor>();
 	private JPanel panel_JobTracker;
 	private JTable table;
+	private JPanel panel_1;
+	private JTable table_1;
 	
 	
 	
@@ -309,6 +314,12 @@ public class Emulator extends JFrame {
 		panel_4.setLayout(gl_panel_4);
 
 		atemePanel = new JPanel();
+		atemePanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				System.out.println("asd");
+			}
+		});
 		tabbedPane_1.addTab("ATEME", null, atemePanel, null);
 
 		JLabel lblAtemeIp = new JLabel();
@@ -775,6 +786,7 @@ public class Emulator extends JFrame {
 		
 
 		chckbxAtemeTranscode = new JCheckBox("ATEME Transcode");
+		chckbxAtemeTranscode.setBackground(Color.RED);
 		chckbxAtemeTranscode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (chckbxAtemeTranscode.isSelected()) {
@@ -1059,34 +1071,41 @@ public class Emulator extends JFrame {
 		panel_JobTracker = new JPanel();
 		tabbedPane.addTab("New tab", null, panel_JobTracker, null);
 		
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		GroupLayout gl_panel_JobTracker = new GroupLayout(panel_JobTracker);
 		gl_panel_JobTracker.setHorizontalGroup(
 			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_JobTracker.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(778, Short.MAX_VALUE))
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 584, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(455, Short.MAX_VALUE))
 		);
 		gl_panel_JobTracker.setVerticalGroup(
 			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_JobTracker.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(621, Short.MAX_VALUE))
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 439, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(384, Short.MAX_VALUE))
 		);
 		
-		DefaultTableModel dm = new DefaultTableModel();
-	    dm.setDataVector(new Object[][] { { "button 1", "foo" },
-	        { "button 2", "bar" } }, new Object[] { "Button", "String" });
-
-	    JTable table = new JTable(dm);
-	    
-	    
-		panel_1.add(table);
+		JScrollPane scrollPane_2 = new JScrollPane();
+		panel_1.add(scrollPane_2);
+		
+		
+		DefaultTableModel jobModel = new DefaultTableModel();
+		jobModel.addColumn("Jobs");
+		jobModel.addColumn("Header Check");
+		jobModel.addColumn("Transcode");
+		jobModel.addColumn("Full QC");
+		jobModel.setRowCount(3);
+		
+		
+		table_1 = new JTable();
+		table_1.setModel(jobModel);
+		table_1.getColumnModel().getColumn(1).setPreferredWidth(80);
+		scrollPane_2.setViewportView(table_1);
 		panel_JobTracker.setLayout(gl_panel_JobTracker);
 		
-
 		panel_2 = new JPanel();
 		tabbedPane.addTab("Grid Management", null, panel_2, null);
 		
@@ -1479,28 +1498,49 @@ public class Emulator extends JFrame {
 			}
 		});
 	}
+	
+	
     
     private void setPanelEnabled(int panelSelection, boolean panelState){
     	switch (panelSelection){
     	case 0:
+    		if (panelState)
+    			chckbxBatonHeader.setBackground(Color.GREEN);
+    		else
+    			chckbxBatonHeader.setBackground(Color.RED);
     		for(Component panelComponent : headerCheckPanel.getComponents())
     			panelComponent.setEnabled(panelState);
     		break;
     	case 1:
-    		for(Component panelComponent : atemePanel.getComponents())
+    		if (panelState)
+    			chckbxAtemeTranscode.setBackground(Color.GREEN);
+    		else
+    			chckbxAtemeTranscode.setBackground(Color.RED);
+    		for(Component panelComponent : atemePanel.getComponents()){
     			panelComponent.setEnabled(panelState);
-    		for(Component panelComponent : atemePanel2.getComponents())
+    		}
+    		for(Component panelComponent : atemePanel2.getComponents()){
     			panelComponent.setEnabled(panelState);
-    		for(Component panelComponent : atemePanel3.getComponents())
+    		}
+    		for(Component panelComponent : atemePanel3.getComponents()){
     			panelComponent.setEnabled(panelState);
+    		}
     		list_Preset.setEnabled(panelState);
     		break;
     	case 2:
+    		if (panelState)
+    			chckbxBatonFullQc.setBackground(Color.GREEN);
+    		else
+    			chckbxBatonFullQc.setBackground(Color.RED);
     		for(Component panelComponent : fullQCPanel.getComponents())
     			panelComponent.setEnabled(panelState);
     		list_TestPlan.setEnabled(panelState);
     		break;
     	case 3:
+    		if (panelState)
+    			chckbxElementalTranscode.setBackground(Color.GREEN);
+    		else
+    			chckbxElementalTranscode.setBackground(Color.RED);
     		for(Component panelComponent : elementalPanel.getComponents())
     			panelComponent.setEnabled(panelState);
     		break;
