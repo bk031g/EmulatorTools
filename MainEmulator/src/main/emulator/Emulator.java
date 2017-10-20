@@ -247,8 +247,19 @@ public class Emulator extends JFrame {
 		btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 
+			
 			public void actionPerformed(ActionEvent arg0) {
+				final ArrayList<String> selectedDirectories = new ArrayList<String>();
+				for (TreePath path : tree.getSelectionPaths()) {
+					StringBuilder sb = new StringBuilder();
+					for (int i = 0; i < path.getPathCount(); i++)
+						sb.append("/" + path.getPathComponent(i).toString());
+					selectedDirectories.add(sb.toString());
+				}
 
+				for (String iterateDirectory : selectedDirectories) {
+					System.out.println("/data/mnt" + iterateDirectory);
+				}
 			}
 		});
 
@@ -929,7 +940,7 @@ public class Emulator extends JFrame {
 		textField_7 = new JTextField();
 		textField_7.setColumns(10);
 
-		String[] elementalPriority = { "Low", "Normal", "High", "Urgent" };
+		String[] elementalPriority = { "25", "50", "75", "100" };
 		SpinnerListModel elementalPriorityModel = new SpinnerListModel(elementalPriority);
 		JSpinner spinner_1 = new JSpinner(elementalPriorityModel);
 
@@ -977,37 +988,36 @@ public class Emulator extends JFrame {
 
 		JButton button_3 = new JButton("Select Folder");
 		GroupLayout gl_elementalPanel1 = new GroupLayout(elementalPanel1);
-            gl_elementalPanel1.setHorizontalGroup(
-            	gl_elementalPanel1.createParallelGroup(Alignment.TRAILING)
-            		.addGap(0, 557, Short.MAX_VALUE)
-            		.addGroup(gl_elementalPanel1.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
-            				.addComponent(label_3)
-            				.addComponent(label_4, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
-            			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
-            				.addComponent(textField_8, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
-            				.addComponent(textField_9, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
-            				.addComponent(button_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
-            			.addContainerGap())
-            );
-            gl_elementalPanel1.setVerticalGroup(
-            	gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
-            		.addGap(0, 99, Short.MAX_VALUE)
-            		.addGroup(gl_elementalPanel1.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(label_3)
-            				.addComponent(textField_8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-            			.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(label_4)
-            				.addComponent(textField_9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-            			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addComponent(button_3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-            			.addGap(37))
-            );
+		gl_elementalPanel1.setHorizontalGroup(
+			gl_elementalPanel1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_elementalPanel1.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
+						.addComponent(label_3)
+						.addComponent(label_4, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
+						.addComponent(textField_8, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+						.addGroup(gl_elementalPanel1.createSequentialGroup()
+							.addComponent(textField_9, GroupLayout.PREFERRED_SIZE, 311, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(button_3, GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		gl_elementalPanel1.setVerticalGroup(
+			gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_elementalPanel1.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_3)
+						.addComponent(textField_8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_4)
+						.addComponent(textField_9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(button_3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+					.addGap(66))
+		);
 		elementalPanel1.setLayout(gl_elementalPanel1);
 
 		JCheckBox checkBox = new JCheckBox("Manual Preset Entry:");
