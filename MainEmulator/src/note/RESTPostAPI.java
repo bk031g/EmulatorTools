@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 public final class RESTPostAPI {
 	
@@ -21,7 +23,51 @@ public final class RESTPostAPI {
 		 * GUI Fields
 		 */
 		
-		//RESTGet("http://10.26.78.41/jobs/7621/status");
+		//System.out.println(RESTGet("http://10.26.78.41/api/jobs"));
+		
+		
+		SAXBuilder sb = new SAXBuilder();
+		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://10.26.78.41/api/presets").getBytes("UTF-8"));
+		Document docc = sb.build(stream);
+		
+		Element testPlan = docc.getRootElement();
+        List<Element> currentName = testPlan.getChildren();
+        ArrayList<String> listOfTestPlans = new ArrayList<String>();
+        for(Element TestPlan : currentName){
+        	listOfTestPlans.add(TestPlan.getChildText("name"));
+        }
+        System.out.println(listOfTestPlans);
+        
+        String xml = "<message>HELLO!</message>";
+        SAXBuilder saxBuilder = new SAXBuilder();
+        
+        try {
+            Document doc = saxBuilder.build(new StringReader(RESTGet("http://10.26.78.41/api/presets")));
+            
+            
+            //System.out.println(doc.getRootElement().getChildren().get(0).getChildText("name"));
+            
+            //System.out.println(RESTGet("http://10.26.78.41/api/presets"));
+            String message = doc.getRootElement().getText();
+            //System.out.println(message);
+            //System.out.println(doc);
+        } catch (JDOMException e) {
+            // handle JDOMException
+        } catch (IOException e) {
+            // handle IOException
+        }
+        
+        //System.out.println(RESTGet("http://10.26.78.41/api/jobs/7630?clean=true"));
+        
+		//System.out.println(RESTGet("http://10.27.99.181/api/jobs/306?clean=true"));
+		
+		XMLOutputter xmlOutput = new XMLOutputter();
+        
+        xmlOutput.setFormat(Format.getPrettyFormat());
+        
+        //try(OutputStream out = new FileOutputStream(absoluteFilePath+String.format("\\BatonXML_output\\%s",inputFile.getName()))) {
+        //    new XMLOutputter().output(document, out);
+        //}
 		
 		/*
 		
@@ -218,12 +264,12 @@ public final class RESTPostAPI {
 		}
 	}
 	
-	public static void RESTGet(String urlString){
+	public static String RESTGet(String urlString){
 		try {
 			URL url = new URL(urlString);
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	        conn.setRequestMethod("GET");
-	        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+	        conn.setRequestProperty("content-type", "application/xml");
 	        BufferedReader rd = new BufferedReader(
 	            new InputStreamReader(conn.getInputStream()));
 	        StringBuilder sb = new StringBuilder();
@@ -232,13 +278,15 @@ public final class RESTPostAPI {
 	          sb.append(line);
 	        }
 	        
-	        System.out.println(sb);
+	        //System.out.println(sb);
 	        rd.close();
 	        conn.disconnect();
+	        return sb.toString();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return urlString;
 	}
 	
 	//conn.setRequestProperty("Accept", "application/xml");

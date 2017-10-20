@@ -5,10 +5,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+
 import org.apache.xmlrpc.XmlRpcException;
 
 public class JobConductor implements Runnable{
 	
+	
+	//Enabled Flags
 	private boolean AtemeTCEnabled;
 	private boolean BatonQCEnabled;
 	private boolean BatonHCEnabled;
@@ -64,7 +67,7 @@ public class JobConductor implements Runnable{
 		if(AtemeTCEnabled == true && BatonQCEnabled == true){
 			atemeTC.run();
 			timer.schedule(new delayBatonQC(), 0, 5000);
-		} 
+		}
 		else if(BatonQCEnabled == true){
 			try {
 				batonQC.run();
@@ -77,5 +80,4 @@ public class JobConductor implements Runnable{
 		}
 	}
 	
-
 }

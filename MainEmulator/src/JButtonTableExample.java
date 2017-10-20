@@ -19,6 +19,8 @@ import javax.swing.table.TableCellRenderer;
  * @version 1.0 11/09/98
  */
 public class JButtonTableExample extends JFrame {
+	
+	private String hold = "asd";
 
   public JButtonTableExample() {
     super("JButtonTable Example");
@@ -26,11 +28,16 @@ public class JButtonTableExample extends JFrame {
     DefaultTableModel dm = new DefaultTableModel();
     dm.setDataVector(new Object[][] { { "button 1", "foo" },
         { "button 2", "bar" } }, new Object[] { "Button", "String" });
-
+    
+    
+    ButtonExtension butrend = new ButtonExtension();
+    
     JTable table = new JTable(dm);
     table.getColumn("Button").setCellRenderer(new ButtonRenderer());
-    table.getColumn("Button").setCellEditor(
-        new ButtonEditor(new JCheckBox()));
+    table.getColumn("Button").setCellEditor(butrend.buttonrend);
+    
+    dm.addRow(new Object[]{"button3","asd"});
+    
     JScrollPane scroll = new JScrollPane(table);
     getContentPane().add(scroll);
     setSize(400, 100);
@@ -78,15 +85,16 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 
 class ButtonEditor extends DefaultCellEditor {
   protected JButton button;
-
   private String label;
-
   private boolean isPushed;
 
   public ButtonEditor(JCheckBox checkBox) {
     super(checkBox);
     button = new JButton();
     button.setOpaque(true);
+    
+    
+    
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         fireEditingStopped();

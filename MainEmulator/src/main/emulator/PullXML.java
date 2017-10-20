@@ -17,9 +17,9 @@ public class PullXML {
 	
 	public static void main(String[] args) throws JDOMException, IOException{
         SAXBuilder saxBuilder = new SAXBuilder();
-        document = saxBuilder.build("http://10.27.99.62/restapi/jobs/C1A0F034-2EE9-4757-B357-64CF639719CB");
+        document = saxBuilder.build("http://10.27.99.181/api/jobs");
         
-        System.out.println(document.getRootElement().getChildText("state"));
+        System.out.println(document.getRootElement().getChildren());
         
 	}
 

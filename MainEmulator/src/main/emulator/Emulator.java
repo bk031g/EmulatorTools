@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,9 +63,11 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.JTable;
+
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.GridLayout;
 
 /**
  *
@@ -97,7 +100,8 @@ public class Emulator extends JFrame {
 	private JTree tree;
 	private JComboBox<?> txtCmsprofiler;
 	private JComboBox<?> textField_BatonHeaderIP;
-	private JList<String> list_Preset;
+	private JList<String> list_AtemePreset;
+	private JList<String> list_ElementalPreset;
 	private JButton btnAtemePopulate;
 	private JSpinner spinner;
 	private JTextField textField;
@@ -107,8 +111,8 @@ public class Emulator extends JFrame {
 	private JCheckBox chckbxManualPresetEntry;
 	private JTextField textField_4;
 	private JCheckBox chckbxManualTestplanEntry;
-	private JTextField textField_5;
-	private JTextField textField_6;
+	private JTextField textField_BatonFilter;
+	private JTextField textField_AtemeFilter;
 	private JButton btnNewButton;
 	
 	private String startingDirectory = "\\\\isilonla3.vod.dtveng.net\\ifs";
@@ -116,7 +120,7 @@ public class Emulator extends JFrame {
 	private JTextField textField_7;
 	private JTextField textField_8;
 	private JTextField textField_9;
-	private JTextField textField_10;
+	private JTextField textField_ElementalFilter;
 	private JTextField textField_11;
 	private JButton btnNewButton_2;
 	
@@ -129,7 +133,8 @@ public class Emulator extends JFrame {
 	
 	private JLabel btnGoTo;
 	
-	private ArrayList<String> listOfPresets;
+	private ArrayList<String> listOfAtemePresets;
+	private ArrayList<String> listOfElementalPresets;
 	private Vector<String> listOfTestPlans;
 	private JCheckBox chckbxBatonFullQc;
 	private JPanel atemePanel;
@@ -149,7 +154,12 @@ public class Emulator extends JFrame {
 	private JPanel panel_JobTracker;
 	private JTable table;
 	private JPanel panelJobTrack;
+	private JScrollPane scrollPane_2;
 	private JTable table_1;
+	private JTextField textField_13;
+	private JPanel elementalPanel1;
+	private JPanel elementalPanel2;
+	private JComboBox<?> textField_ElementalIP;
 	
 	
 	
@@ -200,8 +210,8 @@ public class Emulator extends JFrame {
         setPanelEnabled(1, false);
         setPanelEnabled(2, false);
         setPanelEnabled(3, false);
-        tabbedPane_1.setEnabledAt(2, false);
         atemeChooser.setCurrentDirectory(new File(startingAtemeDirectory));
+        PopulateGUI.atemeChooser.setCurrentDirectory(new File(startingAtemeDirectory));
     }
     
     
@@ -345,7 +355,7 @@ public class Emulator extends JFrame {
 		});
 		btnAtemePopulate.setText("Populate");
 
-		JScrollPane scrollPane_Preset = new JScrollPane();
+		JScrollPane scrollPane_AtemePreset = new JScrollPane();
 
 		String[] atemePriority = { "Low", "Normal", "High", "Urgent" };
 		new SpinnerListModel(atemePriority);
@@ -422,10 +432,10 @@ public class Emulator extends JFrame {
 
 				if (chckbxManualPresetEntry.isSelected()) {
 					textField_3.setEnabled(true);
-					list_Preset.setEnabled(false);
+					list_AtemePreset.setEnabled(false);
 				} else {
 					textField_3.setEnabled(false);
-					list_Preset.setEnabled(true);
+					list_AtemePreset.setEnabled(true);
 				}
 
 			}
@@ -435,9 +445,9 @@ public class Emulator extends JFrame {
 		textField_3.setColumns(10);
 		textField_3.setEnabled(false);
 
-		textField_6 = new JTextField();
+		textField_AtemeFilter = new JTextField();
 
-		textField_6.getDocument().addDocumentListener(new DocumentListener() {
+		textField_AtemeFilter.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				filterATEMEPresets();
@@ -455,7 +465,7 @@ public class Emulator extends JFrame {
 
 		});
 
-		textField_6.setColumns(10);
+		textField_AtemeFilter.setColumns(10);
 
 		JLabel lblFilterPresets = new JLabel();
 		lblFilterPresets.setText("Filter Presets:");
@@ -496,7 +506,7 @@ public class Emulator extends JFrame {
             					.addComponent(btnAtemePopulate, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
             					.addPreferredGap(ComponentPlacement.RELATED)
             					.addComponent(btnAtemeInput, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
-            				.addComponent(scrollPane_Preset, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+            				.addComponent(scrollPane_AtemePreset, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
             				.addComponent(atemePanel2, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
             				.addGroup(Alignment.TRAILING, gl_panel_atemeMain.createSequentialGroup()
             					.addGroup(gl_panel_atemeMain.createParallelGroup(Alignment.LEADING)
@@ -504,7 +514,7 @@ public class Emulator extends JFrame {
             						.addComponent(lblFilterPresets, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
             					.addGap(18)
             					.addGroup(gl_panel_atemeMain.createParallelGroup(Alignment.LEADING)
-            						.addComponent(textField_6, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+            						.addComponent(textField_AtemeFilter, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
             						.addComponent(textField_3, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)))
             				.addGroup(Alignment.TRAILING, gl_panel_atemeMain.createSequentialGroup()
             					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 478, GroupLayout.PREFERRED_SIZE)
@@ -523,10 +533,10 @@ public class Emulator extends JFrame {
             				.addComponent(btnAtemeInput)
             				.addComponent(btnAtemePopulate))
             			.addGap(10)
-            			.addComponent(scrollPane_Preset, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
+            			.addComponent(scrollPane_AtemePreset, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
             			.addPreferredGap(ComponentPlacement.RELATED)
             			.addGroup(gl_panel_atemeMain.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            				.addComponent(textField_AtemeFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             				.addComponent(lblFilterPresets))
             			.addPreferredGap(ComponentPlacement.RELATED)
             			.addGroup(gl_panel_atemeMain.createParallelGroup(Alignment.BASELINE)
@@ -582,8 +592,8 @@ public class Emulator extends JFrame {
             );
 		atemePanel3.setLayout(gl_atemePanel3);
 
-		list_Preset = new JList<String>();
-		scrollPane_Preset.setViewportView(list_Preset);
+		list_AtemePreset = new JList<String>();
+		scrollPane_AtemePreset.setViewportView(list_AtemePreset);
 		atemePanel.setLayout(gl_panel_atemeMain);
 
 		fullQCPanel = new JPanel();
@@ -605,7 +615,12 @@ public class Emulator extends JFrame {
 		JButton btnBatonPopulate = new JButton();
 		btnBatonPopulate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				populateBaton();
+				try {
+					populateBaton();
+				} catch (JDOMException | IOException | XmlRpcException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnBatonPopulate.setText("Populate");
@@ -619,11 +634,11 @@ public class Emulator extends JFrame {
 				if (chckbxManualTestplanEntry.isSelected()) {
 					textField_4.setEnabled(true);
 					list_TestPlan.setEnabled(false);
-					textField_5.setEnabled(false);
+					textField_BatonFilter.setEnabled(false);
 				} else {
 					textField_4.setEnabled(false);
 					list_TestPlan.setEnabled(true);
-					textField_5.setEnabled(true);
+					textField_BatonFilter.setEnabled(true);
 				}
 			}
 		});
@@ -635,9 +650,9 @@ public class Emulator extends JFrame {
 		JLabel BatonSearch = new JLabel();
 		BatonSearch.setText("Filter Test Plans:");
 
-		textField_5 = new JTextField();
+		textField_BatonFilter = new JTextField();
 
-		textField_5.getDocument().addDocumentListener(new DocumentListener() {
+		textField_BatonFilter.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				filterTestPlans();
@@ -654,7 +669,7 @@ public class Emulator extends JFrame {
 			}
 
 		});
-		textField_5.setColumns(10);
+		textField_BatonFilter.setColumns(10);
 
 		lblNewLabel = new JLabel("Job Priority");
 
@@ -687,7 +702,7 @@ public class Emulator extends JFrame {
             						.addComponent(BatonSearch, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
             					.addPreferredGap(ComponentPlacement.RELATED)
             					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-            						.addComponent(textField_5, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+            						.addComponent(textField_BatonFilter, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
             						.addComponent(textField_4, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))))
             			.addContainerGap())
             );
@@ -703,7 +718,7 @@ public class Emulator extends JFrame {
             			.addComponent(scrollPane_TestPlan, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
             			.addPreferredGap(ComponentPlacement.RELATED)
             			.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            				.addComponent(textField_BatonFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             				.addComponent(BatonSearch))
             			.addGap(5)
             			.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
@@ -818,14 +833,12 @@ public class Emulator extends JFrame {
 		chckbxElementalTranscode = new JCheckBox("Elemental Transcode");
 		chckbxElementalTranscode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (chckbxBatonFullQc.isSelected()) {
+				if (chckbxElementalTranscode.isSelected()) {
 					setPanelEnabled(3, true);
 				} else
 					setPanelEnabled(3, false);
 			}
 		});
-
-		chckbxElementalTranscode.setEnabled(false);
 
 		GroupLayout gl_jobCreationPanel = new GroupLayout(jobCreationPanel);
             gl_jobCreationPanel.setHorizontalGroup(
@@ -883,19 +896,29 @@ public class Emulator extends JFrame {
 		lblElementalIp.setText("Elemental IP");
 
 		String[] ElementalIP = { "10.26.78.41", "10.27.99.181" };
-		JComboBox<?> comboBox = new JComboBox<Object>(ElementalIP);
-		comboBox.setEditable(true);
+		textField_ElementalIP = new JComboBox<Object>(ElementalIP);
+		textField_ElementalIP.setEditable(true);
 
 		JButton button_1 = new JButton();
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					populateElemental();
+				} catch (JDOMException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		button_1.setText("Populate");
 
 		JButton button_2 = new JButton();
 		button_2.setText("Folder");
 
-		JScrollPane scrollPane_1 = new JScrollPane();
+		JScrollPane scrollPane_ElementalPreset = new JScrollPane();
 
-		JPanel panel_8 = new JPanel();
-		panel_8.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		elementalPanel2 = new JPanel();
+		elementalPanel2.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
 		JLabel label_1 = new JLabel();
 		label_1.setText("Job Name:");
@@ -910,39 +933,39 @@ public class Emulator extends JFrame {
 		SpinnerListModel elementalPriorityModel = new SpinnerListModel(elementalPriority);
 		JSpinner spinner_1 = new JSpinner(elementalPriorityModel);
 
-            GroupLayout gl_panel_8 = new GroupLayout(panel_8);
-            gl_panel_8.setHorizontalGroup(
-            	gl_panel_8.createParallelGroup(Alignment.LEADING)
+            GroupLayout gl_elementalPanel2 = new GroupLayout(elementalPanel2);
+            gl_elementalPanel2.setHorizontalGroup(
+            	gl_elementalPanel2.createParallelGroup(Alignment.LEADING)
             		.addGap(0, 241, Short.MAX_VALUE)
-            		.addGroup(gl_panel_8.createSequentialGroup()
+            		.addGroup(gl_elementalPanel2.createSequentialGroup()
             			.addContainerGap()
-            			.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
+            			.addGroup(gl_elementalPanel2.createParallelGroup(Alignment.LEADING)
             				.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
             				.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
             			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addGroup(gl_panel_8.createParallelGroup(Alignment.LEADING)
+            			.addGroup(gl_elementalPanel2.createParallelGroup(Alignment.LEADING)
             				.addComponent(textField_7, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
             				.addComponent(spinner_1, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
             			.addContainerGap())
             );
-            gl_panel_8.setVerticalGroup(
-            	gl_panel_8.createParallelGroup(Alignment.LEADING)
+            gl_elementalPanel2.setVerticalGroup(
+            	gl_elementalPanel2.createParallelGroup(Alignment.LEADING)
             		.addGap(0, 75, Short.MAX_VALUE)
-            		.addGroup(gl_panel_8.createSequentialGroup()
+            		.addGroup(gl_elementalPanel2.createSequentialGroup()
             			.addContainerGap()
-            			.addGroup(gl_panel_8.createParallelGroup(Alignment.BASELINE)
+            			.addGroup(gl_elementalPanel2.createParallelGroup(Alignment.BASELINE)
             				.addComponent(label_1)
             				.addComponent(textField_7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
             			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addGroup(gl_panel_8.createParallelGroup(Alignment.BASELINE)
+            			.addGroup(gl_elementalPanel2.createParallelGroup(Alignment.BASELINE)
             				.addComponent(spinner_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             				.addComponent(label_2))
             			.addContainerGap(14, Short.MAX_VALUE))
             );
-		panel_8.setLayout(gl_panel_8);
+		elementalPanel2.setLayout(gl_elementalPanel2);
 
-		JPanel panel_9 = new JPanel();
-		panel_9.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		elementalPanel1 = new JPanel();
+		elementalPanel1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
 		JLabel label_3 = new JLabel();
 		label_3.setText("Output Name:");
@@ -957,47 +980,66 @@ public class Emulator extends JFrame {
 		textField_9.setColumns(10);
 
 		JButton button_3 = new JButton("Select Folder");
-		GroupLayout gl_panel_9 = new GroupLayout(panel_9);
-            gl_panel_9.setHorizontalGroup(
-            	gl_panel_9.createParallelGroup(Alignment.TRAILING)
+		GroupLayout gl_elementalPanel1 = new GroupLayout(elementalPanel1);
+            gl_elementalPanel1.setHorizontalGroup(
+            	gl_elementalPanel1.createParallelGroup(Alignment.TRAILING)
             		.addGap(0, 557, Short.MAX_VALUE)
-            		.addGroup(gl_panel_9.createSequentialGroup()
+            		.addGroup(gl_elementalPanel1.createSequentialGroup()
             			.addContainerGap()
-            			.addGroup(gl_panel_9.createParallelGroup(Alignment.LEADING)
+            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
             				.addComponent(label_3)
             				.addComponent(label_4, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
             			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addGroup(gl_panel_9.createParallelGroup(Alignment.LEADING)
+            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
             				.addComponent(textField_8, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
             				.addComponent(textField_9, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
             				.addComponent(button_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
             			.addContainerGap())
             );
-            gl_panel_9.setVerticalGroup(
-            	gl_panel_9.createParallelGroup(Alignment.LEADING)
+            gl_elementalPanel1.setVerticalGroup(
+            	gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
             		.addGap(0, 99, Short.MAX_VALUE)
-            		.addGroup(gl_panel_9.createSequentialGroup()
+            		.addGroup(gl_elementalPanel1.createSequentialGroup()
             			.addContainerGap()
-            			.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
             				.addComponent(label_3)
             				.addComponent(textField_8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
             			.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            			.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+            			.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
             				.addComponent(label_4)
             				.addComponent(textField_9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
             			.addPreferredGap(ComponentPlacement.RELATED)
             			.addComponent(button_3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
             			.addGap(37))
             );
-		panel_9.setLayout(gl_panel_9);
+		elementalPanel1.setLayout(gl_elementalPanel1);
 
 		JCheckBox checkBox = new JCheckBox("Manual Preset Entry:");
 
 		JLabel label_5 = new JLabel();
 		label_5.setText("Filter Presets:");
 
-		textField_10 = new JTextField();
-		textField_10.setColumns(10);
+		textField_ElementalFilter = new JTextField();
+		
+		textField_ElementalFilter.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				filterElementalPreset();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				filterElementalPreset();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				filterElementalPreset();
+			}
+
+		});
+		
+		textField_ElementalFilter.setColumns(10);
 
 		textField_11 = new JTextField();
 		textField_11.setEnabled(false);
@@ -1013,18 +1055,18 @@ public class Emulator extends JFrame {
             						.addGroup(Alignment.TRAILING, gl_panel_7.createSequentialGroup()
             							.addComponent(lblElementalIp, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
             							.addPreferredGap(ComponentPlacement.RELATED)
-            							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 291, GroupLayout.PREFERRED_SIZE)
+            							.addComponent(textField_ElementalIP, GroupLayout.PREFERRED_SIZE, 291, GroupLayout.PREFERRED_SIZE)
             							.addPreferredGap(ComponentPlacement.RELATED)
             							.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
             							.addPreferredGap(ComponentPlacement.RELATED)
             							.addComponent(button_2, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
-            						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))
+            						.addComponent(scrollPane_ElementalPreset, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))
             					.addContainerGap())
             				.addGroup(gl_panel_7.createSequentialGroup()
-            					.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+            					.addComponent(elementalPanel2, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
             					.addGap(326))
             				.addGroup(gl_panel_7.createSequentialGroup()
-            					.addComponent(panel_9, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+            					.addComponent(elementalPanel1, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
             					.addContainerGap())
             				.addGroup(gl_panel_7.createSequentialGroup()
             					.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
@@ -1032,7 +1074,7 @@ public class Emulator extends JFrame {
             						.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
             					.addGap(18)
             					.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
-            						.addComponent(textField_10, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+            						.addComponent(textField_ElementalFilter, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
             						.addComponent(textField_11, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
             					.addContainerGap())))
             );
@@ -1042,25 +1084,28 @@ public class Emulator extends JFrame {
             			.addContainerGap()
             			.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
             				.addComponent(lblElementalIp)
-            				.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            				.addComponent(textField_ElementalIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             				.addComponent(button_2)
             				.addComponent(button_1))
             			.addGap(10)
-            			.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
+            			.addComponent(scrollPane_ElementalPreset, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
             			.addPreferredGap(ComponentPlacement.RELATED)
             			.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(textField_10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            				.addComponent(textField_ElementalFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             				.addComponent(label_5))
             			.addPreferredGap(ComponentPlacement.RELATED)
             			.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
             				.addComponent(checkBox)
             				.addComponent(textField_11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
             			.addGap(10)
-            			.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+            			.addComponent(elementalPanel1, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
             			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            			.addComponent(elementalPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             			.addContainerGap(61, Short.MAX_VALUE))
             );
+            
+            list_ElementalPreset = new JList<String>();
+            scrollPane_ElementalPreset.setViewportView(list_ElementalPreset);
 		elementalPanel.setLayout(gl_panel_7);
 		jobCreationPanel.setLayout(gl_jobCreationPanel);
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -1076,48 +1121,81 @@ public class Emulator extends JFrame {
 			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_JobTracker.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panelJobTrack, GroupLayout.DEFAULT_SIZE, 1021, Short.MAX_VALUE)
-					.addGap(18))
+					.addComponent(panelJobTrack, GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		gl_panel_JobTracker.setVerticalGroup(
 			gl_panel_JobTracker.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_JobTracker.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panelJobTrack, GroupLayout.PREFERRED_SIZE, 746, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(77, Short.MAX_VALUE))
+					.addComponent(panelJobTrack, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(549, Short.MAX_VALUE))
 		);
 		
-		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2 = new JScrollPane();
 		
-		
-		DefaultTableModel jobModel = new DefaultTableModel();
-		jobModel.addColumn("Jobs");
-		jobModel.addColumn("Header Check");
-		jobModel.addColumn("Transcode");
-		jobModel.addColumn("Full QC");
-		jobModel.setRowCount(3);
-		
-		
-		table_1 = new JTable();
-		table_1.setModel(jobModel);
-		table_1.getColumnModel().getColumn(0).setPreferredWidth(400);
-		scrollPane_2.setViewportView(table_1);
+		textField_13 = new JTextField();
+		textField_13.setColumns(10);
 		GroupLayout gl_panelJobTrack = new GroupLayout(panelJobTrack);
 		gl_panelJobTrack.setHorizontalGroup(
 			gl_panelJobTrack.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelJobTrack.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 1001, Short.MAX_VALUE)
+					.addGroup(gl_panelJobTrack.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+						.addComponent(textField_13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
 		gl_panelJobTrack.setVerticalGroup(
 			gl_panelJobTrack.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelJobTrack.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(333, Short.MAX_VALUE))
+					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+					.addComponent(textField_13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
+		
+		
+		
+		
+		DefaultTableModel jobModel = new DefaultTableModel() {
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		};
+		jobModel.addColumn("Jobs");
+		jobModel.addColumn("Header Check");
+		jobModel.addColumn("Transcode");
+		jobModel.addColumn("Full QC");
+		
+		for (int i = 0; i<9; i++){
+			jobModel.addRow(new Object[]{String.format("Column %s", i), "Column %s"});
+		}
+		jobModel.addRow(new Object[]{"Column 2", "Column 3"});
+		jobModel.setRowCount(10);
+		
+		
+		table_1 = new JTable(jobModel);
+		scrollPane_2.setViewportView(table_1);
 		panelJobTrack.setLayout(gl_panelJobTrack);
+		
+		table_1.addMouseListener(new MouseAdapter() {
+			  public void mousePressed(MouseEvent e) {
+			    if (e.getClickCount() == 2) {
+			      JTable target = (JTable)e.getSource();
+			      int row = target.getSelectedRow();
+			      int column = target.getSelectedColumn();
+			      
+			      System.out.println(row + " " + column);
+			      // do some action if appropriate column
+			    }
+			  }
+			});
+		
+		
 		panel_JobTracker.setLayout(gl_panel_JobTracker);
 		
 		panel_2 = new JPanel();
@@ -1138,52 +1216,18 @@ public class Emulator extends JFrame {
      * ____________________________________________
      */
     
-	private void fileChooser() {
-		atemeChooser.getActionMap().get("viewTypeDetails").actionPerformed(null);
-		atemeChooser.setDialogTitle("Choose Directory");
-		atemeChooser.setAcceptAllFileFilterUsed(false);
-
-		if (atemeChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-			System.out.println("getCurrentDirectory(): "
-					+ atemeChooser.getCurrentDirectory());
-			System.out.println("getSelectedFile() : "
-					+ atemeChooser.getSelectedFile());
-		} else {
-			System.out.println("No Selection ");
-		}
-	}
     
     /*
      * Ateme Input Output Buttons
      */
     
     private void AtemeInputActionPerformed(java.awt.event.ActionEvent arg0){
-		atemeChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		fileChooser();
-
-		listFilesForFolder(atemeChooser.getSelectedFile());
-		java.util.Collections.sort(contentFolderList);
-		Vector<String> testPlansList = new Vector<String>(contentFolderList);
-		list_Preset.setListData(testPlansList);
-        
+		list_AtemePreset.setListData(PopulateGUI.folderPopulateAteme());
     }
     
     private void AtemeOutputActionPerformed(java.awt.event.ActionEvent arg0){
-		atemeChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fileChooser();
-		atemeChooser.getSelectedFile().toString().length();
-		parentFolder = atemeChooser.getSelectedFile().toString();
-		textField.setText(parentFolder);
+    	textField.setText(PopulateGUI.folderOutputAteme());
     }
-    
-    private void listFilesForFolder(final File folder){
-		for (File fileEntry : folder.listFiles()) {
-			if (fileEntry.getName().contains(".kpreset")){
-				contentFolderList.add(fileEntry.getName().substring(0, fileEntry.getName().indexOf(".")));
-			}
-		}
-		
-	}
     
     
     /*
@@ -1241,11 +1285,11 @@ public class Emulator extends JFrame {
 					if (chckbxManualPresetEntry.isSelected()) {
 						selectedPresets.add(textField_3.getText());
 					} else
-						selectedPresets = list_Preset.getSelectedValuesList();
+						selectedPresets = list_AtemePreset.getSelectedValuesList();
 					
 					String jobPriority = ((String) spinner.getValue()).toLowerCase();
 					System.out.println(jobPriority);
-
+					
 					for (String Preset : selectedPresets) {
 						
 						JobConductor initConductor = new JobConductor();
@@ -1292,6 +1336,7 @@ public class Emulator extends JFrame {
 						
 						conductorThread.start();
 					}
+					
 				}
 				
 				else {
@@ -1340,13 +1385,13 @@ public class Emulator extends JFrame {
 	private void conductBatonHeader(String iterateDirectory){
 		String selectedTestPlan = txtCmsprofiler.getSelectedItem().toString();
 		String Priority = (String) spinner.getValue();
-			
-			JobList.get(JobList.size()-1).setBatonHCEnabled(true);
-			JobList.get(JobList.size()-1).batonHC.setIpAddr(textField_BatonHeaderIP.getSelectedItem().toString());
-			JobList.get(JobList.size()-1).batonHC.setPriority(Priority);
-			JobList.get(JobList.size()-1).batonHC.setSelectedDirectory(iterateDirectory);
-			JobList.get(JobList.size()-1).batonHC.setTestPlan(selectedTestPlan);
-			JobList.get(JobList.size()-1).batonHC.setTestPlanVersion(TestPlanVersion);
+
+		JobList.get(JobList.size() - 1).setBatonHCEnabled(true);
+		JobList.get(JobList.size() - 1).batonHC.setIpAddr(textField_BatonHeaderIP.getSelectedItem().toString());
+		JobList.get(JobList.size() - 1).batonHC.setPriority(Priority);
+		JobList.get(JobList.size() - 1).batonHC.setSelectedDirectory(iterateDirectory);
+		JobList.get(JobList.size() - 1).batonHC.setTestPlan(selectedTestPlan);
+		JobList.get(JobList.size() - 1).batonHC.setTestPlanVersion(TestPlanVersion);
 	}
 	
 		/*
@@ -1354,7 +1399,7 @@ public class Emulator extends JFrame {
 		 */
 	
 	private boolean fieldCheckAtemeTC(){
-		if ((list_Preset.isSelectionEmpty() && !chckbxManualPresetEntry.isSelected())
+		if ((list_AtemePreset.isSelectionEmpty() && !chckbxManualPresetEntry.isSelected())
 				|| (textField_3.getText().isEmpty() && chckbxManualPresetEntry.isSelected())) {
 			JOptionPane.showMessageDialog(frame, "Select Preset(s).");
 			return false;
@@ -1396,98 +1441,57 @@ public class Emulator extends JFrame {
 	 */
 	
 	private void populateAteme() throws JDOMException, IOException {
-
-		SAXBuilder sb = new SAXBuilder();
-		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://" + textField_AtemeIP.getSelectedItem()+ "/restapi/presets").getBytes("UTF-8"));
-		Document doc = sb.build(stream);
-
-		Element testPlan = doc.getRootElement();
-		List<Element> currentName = testPlan.getChildren();
-		listOfPresets = new ArrayList<String>();
-		for (Element TestPlan : currentName)
-			listOfPresets.add(TestPlan.getChildText("name"));
-
-		java.util.Collections.sort(listOfPresets);
-		Vector<String> testPlansList = new Vector<String>(listOfPresets);
-		list_Preset.setListData(testPlansList);
+		list_AtemePreset.setListData(PopulateGUI.populateAteme((String)textField_AtemeIP.getSelectedItem()));
 	}
 	
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	private void populateBaton(){
-    	try {
-            baton = new XmlRpcClient("http://"+textField_BatonIP.getSelectedItem()+":8080");
-            baton.setBasicAuthentication("admin", "admin");
-            Object testPlans = baton.execute("Baton.Planner.TestPlans.contents",emptyParam);
-            list_TestPlan.setListData((Vector<String>) testPlans);
-        } catch (MalformedURLException ex) {
-            JOptionPane.showMessageDialog(this,"Failed to connect to server, retrieve test plans");
-        } catch (XmlRpcException ex) {
-            JOptionPane.showMessageDialog(this,"XMLRpcException");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this,"IOException");
-        }
+	private void populateElemental() throws JDOMException, IOException{
+		list_ElementalPreset.setListData(PopulateGUI.populateElemental((String)textField_ElementalIP.getSelectedItem()));
+	}
+	
+	private void populateBaton() throws JDOMException, IOException, XmlRpcException{
+        list_TestPlan.setListData(PopulateGUI.populateBaton((String)textField_BatonIP.getSelectedItem()));
     }
-	
-	private String RESTGetReturn(String urlString){
-		try {
-			URL url = new URL(urlString);
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-	        conn.setRequestProperty("Accept", "application/xml");
-	        BufferedReader rd = new BufferedReader(
-	            new InputStreamReader(conn.getInputStream()));
-	        StringBuilder sb = new StringBuilder();
-	        String line;
-	        while ((line = rd.readLine()) != null) {
-	          sb.append(line);
-	        }
-	        
-	        rd.close();
-	        conn.disconnect();
-	        return sb.toString();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "ERROR 404, unable to reach: " + urlString);
-			e.printStackTrace();
-		}
-		return "Placeholder";
-	}
 	
 	/*
 	 * Filter
 	 */
     
     private void filterATEMEPresets(){
-    	if(!listOfPresets.isEmpty()){
-    		
-    		ArrayList<String> newListOfPresets = new ArrayList<String>();
-    		
-    		for(int i = 0; i < listOfPresets.size(); i++){
-    			if(listOfPresets.get(i).toLowerCase().contains(textField_6.getText().toLowerCase())){
-    				newListOfPresets.add(listOfPresets.get(i));
-    			}
-    		}
-    		Vector<String> presetsList = new Vector<String>(newListOfPresets);
-            list_Preset.setListData(presetsList);
-    		
+    	if(!PopulateGUI.listOfAtemePresets.isEmpty()){
+            try {
+				list_AtemePreset.setListData(PopulateGUI.filterAteme(textField_AtemeFilter.getText()));
+			} catch (JDOMException | IOException | XmlRpcException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     }
     
     private void filterTestPlans() {
-		if (!listOfTestPlans.isEmpty()) {
-			ArrayList<String> newListOfTestPlans = new ArrayList<String>();
-			for (String i : listOfTestPlans) {
-				if (i.toLowerCase().contains(textField_5.getText().toLowerCase())) {
-					newListOfTestPlans.add(i);
-				}
+		if (!PopulateGUI.listOfTestPlans.isEmpty()) {
+			try {
+				list_TestPlan.setListData(PopulateGUI.filterBaton(textField_BatonFilter.getText()));
+			} catch (JDOMException | IOException | XmlRpcException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			Vector<String> testPlansList = new Vector<String>(newListOfTestPlans);
-			list_TestPlan.setListData(testPlansList);
 		}
 	}
     
+    private void filterElementalPreset(){
+    	if(!PopulateGUI.listOfElementalPresets.isEmpty()){
+            try {
+				list_ElementalPreset.setListData(PopulateGUI.filterElemental(textField_ElementalFilter.getText()));
+			} catch (JDOMException | IOException | XmlRpcException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    }
+    
     
     private void createContentTable(String targetDirectory){
+    	
     	File file = new File(targetDirectory);
         MyFile mf = new MyFile(file);
         TreeModel model = new FileTreeModel(mf);
@@ -1539,7 +1543,7 @@ public class Emulator extends JFrame {
     		for(Component panelComponent : atemePanel3.getComponents()){
     			panelComponent.setEnabled(panelState);
     		}
-    		list_Preset.setEnabled(panelState);
+    		list_AtemePreset.setEnabled(panelState);
     		break;
     	case 2:
     		if (panelState)
@@ -1556,6 +1560,10 @@ public class Emulator extends JFrame {
     		else
     			chckbxElementalTranscode.setBackground(Color.RED);
     		for(Component panelComponent : elementalPanel.getComponents())
+    			panelComponent.setEnabled(panelState);
+    		for(Component panelComponent : elementalPanel1.getComponents())
+    			panelComponent.setEnabled(panelState);
+    		for(Component panelComponent : elementalPanel2.getComponents())
     			panelComponent.setEnabled(panelState);
     		break;
     	}
