@@ -104,7 +104,7 @@ public class Emulator extends JFrame {
 	private JList<String> list_ElementalPreset;
 	private JButton btnAtemePopulate;
 	private JSpinner spinner;
-	private JTextField textField;
+	private JTextField textField_AtemeOutput;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
@@ -119,7 +119,7 @@ public class Emulator extends JFrame {
 	private String startingAtemeDirectory = "\\\\isilonla3.vod.dtveng.net\\ifs\\ATEME";
 	private JTextField textField_7;
 	private JTextField textField_8;
-	private JTextField textField_9;
+	private JTextField textField_ElementalOutput;
 	private JTextField textField_ElementalFilter;
 	private JTextField textField_11;
 	private JButton btnNewButton_2;
@@ -162,6 +162,10 @@ public class Emulator extends JFrame {
 	private JComboBox<?> textField_ElementalIP;
 	private JButton btn_ElementalPresets;
 	private JButton btn_ElementalProfiles;
+	private JCheckBox chckbxManualPresetEntryElemenal;
+	private JSpinner spinner_1;
+	
+	private boolean isElementalProfile;
 	
 	
 	
@@ -390,8 +394,8 @@ public class Emulator extends JFrame {
 		JLabel lblOutputDirectory = new JLabel();
 		lblOutputDirectory.setText("Output Folder:");
 
-		textField = new JTextField();
-		textField.setColumns(10);
+		textField_AtemeOutput = new JTextField();
+		textField_AtemeOutput.setColumns(10);
 
 		JButton btnAtemeOutput = new JButton("Select Folder");
 		btnAtemeOutput.addActionListener(new ActionListener() {
@@ -425,7 +429,7 @@ public class Emulator extends JFrame {
 							.addComponent(btnExtractXmlTo))
 						.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
 						.addGroup(Alignment.TRAILING, gl_atemePanel2.createSequentialGroup()
-							.addComponent(textField, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+							.addComponent(textField_AtemeOutput, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnAtemeOutput, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
@@ -440,7 +444,7 @@ public class Emulator extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGroup(gl_atemePanel2.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblOutputDirectory)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_AtemeOutput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnAtemeOutput, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_atemePanel2.createParallelGroup(Alignment.BASELINE)
@@ -969,7 +973,7 @@ public class Emulator extends JFrame {
 
 		String[] elementalPriority = { "25", "50", "75", "100" };
 		SpinnerListModel elementalPriorityModel = new SpinnerListModel(elementalPriority);
-		JSpinner spinner_1 = new JSpinner(elementalPriorityModel);
+		spinner_1 = new JSpinner(elementalPriorityModel);
 
             GroupLayout gl_elementalPanel2 = new GroupLayout(elementalPanel2);
             gl_elementalPanel2.setHorizontalGroup(
@@ -1010,8 +1014,8 @@ public class Emulator extends JFrame {
 		textField_8 = new JTextField();
 		textField_8.setColumns(10);
 
-		textField_9 = new JTextField();
-		textField_9.setColumns(10);
+		textField_ElementalOutput = new JTextField();
+		textField_ElementalOutput.setColumns(10);
 
 		JButton button_3 = new JButton("Select Folder");
 		GroupLayout gl_elementalPanel1 = new GroupLayout(elementalPanel1);
@@ -1026,7 +1030,7 @@ public class Emulator extends JFrame {
 					.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.LEADING)
 						.addComponent(textField_8, GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
 						.addGroup(gl_elementalPanel1.createSequentialGroup()
-							.addComponent(textField_9, GroupLayout.PREFERRED_SIZE, 311, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textField_ElementalOutput, GroupLayout.PREFERRED_SIZE, 311, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(button_3, GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
 					.addContainerGap())
@@ -1041,13 +1045,13 @@ public class Emulator extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGroup(gl_elementalPanel1.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_4)
-						.addComponent(textField_9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_ElementalOutput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(button_3, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 					.addGap(66))
 		);
 		elementalPanel1.setLayout(gl_elementalPanel1);
 
-		JCheckBox checkBox = new JCheckBox("Manual Preset Entry:");
+		chckbxManualPresetEntryElemenal = new JCheckBox("Manual Preset Entry:");
 
 		JLabel label_5 = new JLabel();
 		label_5.setText("Filter Presets:");
@@ -1097,7 +1101,7 @@ public class Emulator extends JFrame {
 							.addContainerGap())
 						.addGroup(gl_panel_7.createSequentialGroup()
 							.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
-								.addComponent(checkBox)
+								.addComponent(chckbxManualPresetEntryElemenal)
 								.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
@@ -1127,7 +1131,7 @@ public class Emulator extends JFrame {
 						.addComponent(label_5))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-						.addComponent(checkBox)
+						.addComponent(chckbxManualPresetEntryElemenal)
 						.addComponent(textField_11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(10)
 					.addComponent(elementalPanel1, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
@@ -1258,7 +1262,7 @@ public class Emulator extends JFrame {
     }
     
     private void AtemeOutputActionPerformed(java.awt.event.ActionEvent arg0){
-    	textField.setText(PopulateGUI.folderOutputAteme());
+    	textField_AtemeOutput.setText(PopulateGUI.folderOutputAteme());
     }
     
     
@@ -1273,6 +1277,7 @@ public class Emulator extends JFrame {
 		boolean atemeTCEnabled = false;
 		boolean batonQCEnabled = false;
 		boolean batonHCEnabled = false;
+		boolean elementalTCEnabled = false;
 		boolean missingField = false;
 
 		if (tree.isSelectionEmpty()) {
@@ -1294,6 +1299,12 @@ public class Emulator extends JFrame {
 		if (chckbxBatonHeader.isSelected()) {
 			batonHCEnabled = true;
 			if (!fieldCheckBatonHC()) {
+				missingField = true;
+			}
+		}
+		if (chckbxElementalTranscode.isSelected()) {
+			elementalTCEnabled = true;
+			if (!fieldCheckElementalTC()) {
 				missingField = true;
 			}
 		}
@@ -1343,9 +1354,9 @@ public class Emulator extends JFrame {
 						String jobSegmentNumber = "1";
 						String jobState = "pending";
 						String jobOutput;
-						String outputFolder = textField.getText();
-						if (textField.getText().endsWith("\\"))
-							outputFolder = textField.getText().substring(0, textField.getText().length() - 1);
+						String outputFolder = textField_AtemeOutput.getText();
+						if (textField_AtemeOutput.getText().endsWith("\\"))
+							outputFolder = textField_AtemeOutput.getText().substring(0, textField_AtemeOutput.getText().length() - 1);
 						if(textField_1.getText().trim().equals(""))
 							jobOutput = outputFolder + "\\" + fillerName;
 						else 
@@ -1371,6 +1382,67 @@ public class Emulator extends JFrame {
 						conductorThread.start();
 					}
 					
+				}
+				
+				else if (elementalTCEnabled){
+					List<String> selectedPresets = new ArrayList<String>();
+					if (chckbxManualPresetEntryElemenal.isSelected()) {
+						selectedPresets.add(textField_11.getText());
+					} else
+						selectedPresets = list_ElementalPreset.getSelectedValuesList();
+					
+					String jobPriority = ((String) spinner_1.getValue()).toLowerCase();
+					System.out.println(jobPriority);
+					
+					for (String Preset : selectedPresets) {
+						
+						JobConductor initConductor = new JobConductor();
+						JobList.add(initConductor);
+						Thread conductorThread = new Thread(JobList.get(JobList.size()-1));
+						
+						if (batonHCEnabled && singleHeaderCheck) {
+							String selectedDirectory = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
+							conductBatonHeader(selectedDirectory);
+							singleHeaderCheck = false;
+						}
+						
+						if(isElementalProfile){
+							
+							initConductor.setElementalTCEnabled(true);
+							
+							//Gather and clean all inputs
+							String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")";
+							String ipAddr = (String) textField_ElementalIP.getSelectedItem();
+							String jobInput = (startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1))).replace("\\", "/");
+							System.out.println(jobInput);
+							String jobProfile = PopulateGUI.elementalProfilesHMap.get(Preset);
+							String outputFolder = textField_ElementalOutput.getText();
+							String jobOutput;
+							if (textField_ElementalOutput.getText().endsWith("\\"))
+								outputFolder = textField_ElementalOutput.getText().substring(0, textField_ElementalOutput.getText().length() - 1);
+							if(textField_1.getText().trim().equals(""))
+								jobOutput = (outputFolder + "\\" + fillerName).replace("\\", "/");
+							else 
+								jobOutput = (outputFolder + "\\" + textField_1.getText()+".ts").replace("\\", "/");
+							
+							System.out.println(ipAddr);
+							System.out.println(jobInput);
+							System.out.println(jobOutput);
+							System.out.println(jobProfile);
+							initConductor.elementalTC.setIpAddr(ipAddr);
+							initConductor.elementalTC.setJobInput(jobInput);
+							initConductor.elementalTC.setJobOutput(jobOutput);
+							initConductor.elementalTC.setJobProfile(jobProfile);
+						}
+						
+						//Append Baton handoff
+//						if (batonQCEnabled){
+//							conductBaton(jobOutput);
+//						}
+						
+						//Start JobConductor thread
+						conductorThread.start();
+					}
 				}
 				
 				else {
@@ -1438,7 +1510,7 @@ public class Emulator extends JFrame {
 			JOptionPane.showMessageDialog(frame, "Select Preset(s).");
 			return false;
 		}
-		else if (textField.getText().isEmpty()){
+		else if (textField_AtemeOutput.getText().isEmpty()){
 			JOptionPane.showMessageDialog(frame,"Select Output Folder.");
 			return false;
 		}
@@ -1446,6 +1518,19 @@ public class Emulator extends JFrame {
 			return true;
 	}
 	
+	private boolean fieldCheckElementalTC(){
+		if ((list_ElementalPreset.isSelectionEmpty() && !chckbxManualPresetEntryElemenal.isSelected())
+				|| (textField_11.getText().isEmpty() && chckbxManualPresetEntryElemenal.isSelected())) {
+			JOptionPane.showMessageDialog(frame, "Select Preset(s).");
+			return false;
+		}
+		else if (textField_ElementalOutput.getText().isEmpty()){
+			JOptionPane.showMessageDialog(frame,"Select Output Folder.");
+			return false;
+		}
+		else
+			return true;
+	}
 	private boolean fieldCheckBatonQC(){
 		System.out.println(textField_4.getText().isEmpty() && chckbxManualTestplanEntry.isSelected());
 		if (list_TestPlan.isSelectionEmpty() && !chckbxManualTestplanEntry.isSelected()
@@ -1480,10 +1565,12 @@ public class Emulator extends JFrame {
 	
 	private void populateElemental() throws JDOMException, IOException{
 		list_ElementalPreset.setListData(PopulateGUI.populateElemental((String)textField_ElementalIP.getSelectedItem(), "/api/presets?page=1&per_page=100000"));
+		isElementalProfile = false;
 	}
 	
 	private void populateElementalProfiles() throws JDOMException, IOException{
 		list_ElementalPreset.setListData(PopulateGUI.populateElemental((String)textField_ElementalIP.getSelectedItem(), "/api/job_profiles?page=1&per_page=100000"));
+		isElementalProfile = true;
 	}
 	
 	private void populateBaton() throws JDOMException, IOException, XmlRpcException{
