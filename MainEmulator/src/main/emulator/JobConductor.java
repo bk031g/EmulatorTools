@@ -57,6 +57,7 @@ public class JobConductor implements Runnable{
 	
 	public void run(){
 		
+		System.out.println("In jobConductor");
 		if(BatonHCEnabled == true){
 			try {
 				batonHC.run();
@@ -78,6 +79,21 @@ public class JobConductor implements Runnable{
 		}
 		else if(AtemeTCEnabled == true){
 			atemeTC.run();
+		}
+		
+		if(ElementalTCEnabled == true && BatonQCEnabled == true){
+			elementalTC.run();
+			timer.schedule(new delayBatonQC(), 0, 5000);
+		}
+		else if(BatonQCEnabled == true){
+			try {
+				batonQC.run();
+			} catch (XmlRpcException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if(ElementalTCEnabled == true){
+			elementalTC.run();
 		}
 	}
 	

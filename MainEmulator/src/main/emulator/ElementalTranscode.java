@@ -35,6 +35,8 @@ public class ElementalTranscode{
 	}
 	
 	public void run(){
+		
+		System.out.println("Elemental Running");
 		URL url;
 			try {
 
