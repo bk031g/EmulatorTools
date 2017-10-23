@@ -118,7 +118,7 @@ public final class TestElemental {
 		
 		
 		SAXBuilder sb = new SAXBuilder();
-		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://10.26.78.41/api/presets?page=1&per_page=100000").getBytes("UTF-8"));
+		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://10.26.78.41/api/job_profiles").getBytes("UTF-8"));
 		Document doc = sb.build(stream);
 		
 		Element testPlan = doc.getRootElement();
@@ -126,6 +126,7 @@ public final class TestElemental {
         ArrayList<String> listOfTestPlans = new ArrayList<String>();
         for(Element TestPlan : currentName){
         	System.out.println(TestPlan.getChildText("name"));
+        	System.out.println(TestPlan.getAttributeValue("href"));
         	listOfTestPlans.add(TestPlan.getChildText("name"));
         }
         System.out.println(listOfTestPlans);

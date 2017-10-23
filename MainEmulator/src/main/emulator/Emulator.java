@@ -160,6 +160,8 @@ public class Emulator extends JFrame {
 	private JPanel elementalPanel1;
 	private JPanel elementalPanel2;
 	private JComboBox<?> textField_ElementalIP;
+	private JButton btn_ElementalPresets;
+	private JButton btn_ElementalProfiles;
 	
 	
 	
@@ -249,17 +251,28 @@ public class Emulator extends JFrame {
 
 			
 			public void actionPerformed(ActionEvent arg0) {
-				final ArrayList<String> selectedDirectories = new ArrayList<String>();
-				for (TreePath path : tree.getSelectionPaths()) {
-					StringBuilder sb = new StringBuilder();
-					for (int i = 0; i < path.getPathCount(); i++)
-						sb.append("/" + path.getPathComponent(i).toString());
-					selectedDirectories.add(sb.toString());
+				
+				List<String> selectedPresets = list_ElementalPreset.getSelectedValuesList();
+				for (String Preset : selectedPresets){
+					System.out.println(Preset);
+					System.out.println(PopulateGUI.elementalProfilesHMap.get(Preset));
 				}
-
-				for (String iterateDirectory : selectedDirectories) {
-					System.out.println("/data/mnt" + iterateDirectory);
-				}
+				
+				
+//				
+//				
+//				final ArrayList<String> selectedDirectories = new ArrayList<String>();
+//				for (TreePath path : tree.getSelectionPaths()) {
+//					StringBuilder sb = new StringBuilder();
+//					for (int i = 0; i < path.getPathCount(); i++)
+//						sb.append("/" + path.getPathComponent(i).toString());
+//					selectedDirectories.add(sb.toString());
+//				}
+//
+//				for (String iterateDirectory : selectedDirectories) {
+//					System.out.println("/data/mnt" + iterateDirectory);
+//				}
+//				
 			}
 		});
 
@@ -816,6 +829,8 @@ public class Emulator extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (chckbxAtemeTranscode.isSelected()) {
 					setPanelEnabled(1, true);
+					chckbxElementalTranscode.setSelected(false);
+					setPanelEnabled(3, false);
 				} else
 					setPanelEnabled(1, false);
 			}
@@ -846,59 +861,61 @@ public class Emulator extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (chckbxElementalTranscode.isSelected()) {
 					setPanelEnabled(3, true);
+					chckbxAtemeTranscode.setSelected(false);
+					setPanelEnabled(1, false);
 				} else
 					setPanelEnabled(3, false);
 			}
 		});
 
 		GroupLayout gl_jobCreationPanel = new GroupLayout(jobCreationPanel);
-            gl_jobCreationPanel.setHorizontalGroup(
-            	gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
-            		.addGroup(gl_jobCreationPanel.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
-            				.addComponent(lblContentInput, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-            				.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 433, GroupLayout.PREFERRED_SIZE))
-            			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
-            				.addGroup(gl_jobCreationPanel.createSequentialGroup()
-            					.addComponent(chckbxBatonHeader)
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addComponent(chckbxAtemeTranscode)
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addComponent(chckbxBatonFullQc)
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addComponent(chckbxElementalTranscode))
-            				.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.TRAILING)
-            					.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
-            					.addGroup(Alignment.LEADING, gl_jobCreationPanel.createSequentialGroup()
-            						.addGap(65)
-            						.addComponent(btnNewButton)
-            						.addPreferredGap(ComponentPlacement.RELATED, 341, Short.MAX_VALUE)
-            						.addComponent(btnSubmit, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))))
-            			.addGap(18))
-            );
-            gl_jobCreationPanel.setVerticalGroup(
-            	gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
-            		.addGroup(gl_jobCreationPanel.createSequentialGroup()
-            			.addGap(11)
-            			.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(chckbxBatonHeader)
-            				.addComponent(chckbxAtemeTranscode)
-            				.addComponent(chckbxBatonFullQc)
-            				.addComponent(lblContentInput)
-            				.addComponent(chckbxElementalTranscode))
-            			.addGap(7)
-            			.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
-            				.addGroup(Alignment.TRAILING, gl_jobCreationPanel.createSequentialGroup()
-            					.addComponent(tabbedPane_1, GroupLayout.PREFERRED_SIZE, 731, GroupLayout.PREFERRED_SIZE)
-            					.addGap(6)
-            					.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.TRAILING)
-            						.addComponent(btnNewButton)
-            						.addComponent(btnSubmit)))
-            				.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            			.addContainerGap())
-            );
+		gl_jobCreationPanel.setHorizontalGroup(
+			gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_jobCreationPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblContentInput, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 433, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_jobCreationPanel.createSequentialGroup()
+							.addComponent(chckbxBatonHeader)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(chckbxAtemeTranscode)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(chckbxElementalTranscode)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(chckbxBatonFullQc))
+						.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
+							.addComponent(tabbedPane_1, GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
+							.addGroup(gl_jobCreationPanel.createSequentialGroup()
+								.addGap(65)
+								.addComponent(btnNewButton)
+								.addPreferredGap(ComponentPlacement.RELATED, 341, Short.MAX_VALUE)
+								.addComponent(btnSubmit, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))))
+					.addGap(18))
+		);
+		gl_jobCreationPanel.setVerticalGroup(
+			gl_jobCreationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_jobCreationPanel.createSequentialGroup()
+					.addGap(11)
+					.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(chckbxBatonHeader)
+						.addComponent(chckbxAtemeTranscode)
+						.addComponent(lblContentInput)
+						.addComponent(chckbxElementalTranscode)
+						.addComponent(chckbxBatonFullQc))
+					.addGap(7)
+					.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_jobCreationPanel.createSequentialGroup()
+							.addComponent(tabbedPane_1, GroupLayout.PREFERRED_SIZE, 731, GroupLayout.PREFERRED_SIZE)
+							.addGap(6)
+							.addGroup(gl_jobCreationPanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnNewButton)
+								.addComponent(btnSubmit)))
+						.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap())
+		);
 
 		elementalPanel = new JPanel();
 		tabbedPane_1.addTab("Elemental", null, elementalPanel, null);
@@ -910,8 +927,8 @@ public class Emulator extends JFrame {
 		textField_ElementalIP = new JComboBox<Object>(ElementalIP);
 		textField_ElementalIP.setEditable(true);
 
-		JButton button_1 = new JButton();
-		button_1.addActionListener(new ActionListener() {
+		btn_ElementalPresets = new JButton();
+		btn_ElementalPresets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					populateElemental();
@@ -921,10 +938,20 @@ public class Emulator extends JFrame {
 				}
 			}
 		});
-		button_1.setText("Populate");
+		btn_ElementalPresets.setText("Presets");
 
-		JButton button_2 = new JButton();
-		button_2.setText("Folder");
+		btn_ElementalProfiles = new JButton();
+		btn_ElementalProfiles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					populateElementalProfiles();
+				} catch (JDOMException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		btn_ElementalProfiles.setText("Profiles");
 
 		JScrollPane scrollPane_ElementalPreset = new JScrollPane();
 
@@ -1063,9 +1090,9 @@ public class Emulator extends JFrame {
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(textField_ElementalIP, GroupLayout.PREFERRED_SIZE, 291, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+									.addComponent(btn_ElementalPresets, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(button_2, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+									.addComponent(btn_ElementalProfiles, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
 								.addComponent(scrollPane_ElementalPreset, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))
 							.addContainerGap())
 						.addGroup(gl_panel_7.createSequentialGroup()
@@ -1090,8 +1117,8 @@ public class Emulator extends JFrame {
 					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblElementalIp)
 						.addComponent(textField_ElementalIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(button_2)
-						.addComponent(button_1))
+						.addComponent(btn_ElementalProfiles)
+						.addComponent(btn_ElementalPresets))
 					.addGap(10)
 					.addComponent(scrollPane_ElementalPreset, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -1307,6 +1334,7 @@ public class Emulator extends JFrame {
 							singleHeaderCheck = false;
 						}
 						
+						//Gather and clean all inputs
 						String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")"+".ts";
 						String jobName = textField_2.getText().trim().equals("") ? fillerName : textField_2.getText();
 						String ipAddr = (String) textField_AtemeIP.getSelectedItem();
@@ -1314,7 +1342,6 @@ public class Emulator extends JFrame {
 						String jobInput = startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1));
 						String jobSegmentNumber = "1";
 						String jobState = "pending";
-						
 						String jobOutput;
 						String outputFolder = textField.getText();
 						if (textField.getText().endsWith("\\"))
@@ -1324,7 +1351,7 @@ public class Emulator extends JFrame {
 						else 
 							jobOutput = outputFolder + "\\" + textField_1.getText()+".ts";
 						
-						
+						//Set all inputs
 						initConductor.setAtemeTCEnabled(true);
 						initConductor.atemeTC.setIpAddr(ipAddr);
 						initConductor.atemeTC.setJobPreset(jobPreset);
@@ -1335,10 +1362,12 @@ public class Emulator extends JFrame {
 						initConductor.atemeTC.setJobName(jobName);
 						initConductor.atemeTC.setJobPriority(jobPriority);
 						
+						//Append Baton handoff
 						if (batonQCEnabled){
 							conductBaton(jobOutput);
 						}
 						
+						//Start JobConductor thread
 						conductorThread.start();
 					}
 					
@@ -1450,7 +1479,11 @@ public class Emulator extends JFrame {
 	}
 	
 	private void populateElemental() throws JDOMException, IOException{
-		list_ElementalPreset.setListData(PopulateGUI.populateElemental((String)textField_ElementalIP.getSelectedItem()));
+		list_ElementalPreset.setListData(PopulateGUI.populateElemental((String)textField_ElementalIP.getSelectedItem(), "/api/presets?page=1&per_page=100000"));
+	}
+	
+	private void populateElementalProfiles() throws JDOMException, IOException{
+		list_ElementalPreset.setListData(PopulateGUI.populateElemental((String)textField_ElementalIP.getSelectedItem(), "/api/job_profiles?page=1&per_page=100000"));
 	}
 	
 	private void populateBaton() throws JDOMException, IOException, XmlRpcException{

@@ -1,43 +1,78 @@
-package note;
+package main.emulator;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-public class TestElementalJobSubmission {
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
-	public static void main(String[] args) {
-		String urlString = "http://10.27.99.184/jobs";
+public class ElementalTranscode{
+	
+	private String ipAddr;
+	private String jobInput;
+	private String jobOutput;
+	private String jobProfile;
+	
+	public void setIpAddr(String ipAddr) {
+		this.ipAddr = ipAddr;
+	}
+	public void setJobInput(String jobInput) {
+		this.jobInput = jobInput;
+	}
+	public void setJobOutput(String jobOutput) {
+		this.jobOutput = jobOutput;
+	}
+	public void setJobProfile(String jobProfile) {
+		this.jobProfile = jobProfile;
+	}
+	
+	public void run(){
 		URL url;
 			try {
 
-				url = new URL(urlString);
+				url = new URL("http://" + ipAddr + "/jobs");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("POST");
 				conn.setDoOutput(true);
 				//conn.setDoInput(true);
 				conn.setUseCaches(false);
 				conn.setAllowUserInteraction(false);
-				//conn.setRequestProperty("accept-charset", "UTF-8");
 				conn.setRequestProperty("content-type", "application/xml");
-				// Create the form content
 				OutputStream out = conn.getOutputStream();
 				Writer writer = new OutputStreamWriter(out, "UTF-8");
 				String paramName =
+						"<job>"
+						+ "<input>"
+						+ "<file_input>"
+						+ "<uri>"
+						+ jobInput //"/isilonla3.vod.dtveng.net/ifs/Kevin_Kha/Misc_Projects/Ads/Content/FastOnly/FixedProfile/Boxing/Boxing_3.ts"
+						+ "</uri>"
+						+ "</file_input>"
+						+ "</input>"
 						
-						
-						 
-						"<job><input><file_input>"
-						+ "<uri>/isilonla3.vod.dtveng.net/ifs/Kevin_Kha/Misc_Projects/Ads/Content/FastOnly/FixedProfile/Boxing/Boxing_2.ts</uri>"
-						+ "</file_input></input>"
 						+ "<output_group>"
 						+ "<order>1</order>"
 						+ "<file_group_settings>"
 						+ "<destination>"
-						+ "<uri>/isilonla3.vod.dtveng.net/ifs/Kevin_Kha/Misc_Projects/Ads/Content/FastOnly/FixedProfile/Boxing/TestingElem/Test4</uri>"
+						+ "<uri>"
+						+ jobOutput //"/isilonla3.vod.dtveng.net/ifs/Kevin_Kha/Misc_Projects/Ads/Content/FastOnly/FixedProfile/Boxing/TestingElem/Test3"
+						+ "</uri>"
 						+ "</destination>"
 						+ "</file_group_settings>"
 						+ "</output_group>"
-						+ "<profile>22</profile>"
+						
+						+ "<profile>"
+						+ jobProfile //"22"
+						+ "</profile>"
+						
 						+ "</job>";
 						
 						
@@ -197,5 +232,5 @@ public class TestElementalJobSubmission {
 				e.printStackTrace();
 			}
 	}
-
+	
 }

@@ -21,6 +21,7 @@ public class JobConductor implements Runnable{
 	public AtemeTranscode atemeTC = new AtemeTranscode();
 	public BatonFullQC batonQC = new BatonFullQC();
 	public BatonFullQC batonHC = new BatonFullQC();
+	public ElementalTranscode elementalTC = new ElementalTranscode();
 	
 	
 	

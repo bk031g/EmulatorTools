@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JFileChooser;
@@ -27,12 +29,16 @@ public class PopulateGUI {
 	static ArrayList<String> listOfAtemePresets;
 	static Vector<String> listOfTestPlans;
 	static ArrayList<String> listOfElementalPresets;
+	static Map<String, String> elementalProfilesHMap = new HashMap<String,String>();
+	
 	static JFileChooser atemeChooser = new JFileChooser();
 	static JFileChooser elementalChooser = new JFileChooser();
 	
-	public static Vector<String> populateElemental(String ipAddr) throws JDOMException, IOException{
+	
+	//listOfElementalPresets, elementalProfilesHMap
+	public static Vector<String> populateElemental(String ipAddr, String requestType) throws JDOMException, IOException{
 		SAXBuilder sb = new SAXBuilder();
-		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://" + ipAddr + "/api/presets?page=1&per_page=100000").getBytes("UTF-8"));
+		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://" + ipAddr + requestType).getBytes("UTF-8"));
 		Document doc = sb.build(stream);
 		
 		Element testPlan = doc.getRootElement();
@@ -40,12 +46,14 @@ public class PopulateGUI {
         listOfElementalPresets = new ArrayList<String>();
         for(Element TestPlan : currentName){
         	listOfElementalPresets.add(TestPlan.getChildText("name"));
+        	elementalProfilesHMap.put(TestPlan.getChildText("name"), TestPlan.getAttributeValue("href").substring(TestPlan.getAttributeValue("href").lastIndexOf("/") +1).trim());
         }
         java.util.Collections.sort(listOfElementalPresets);
 		Vector<String> testPlansList = new Vector<String>(listOfElementalPresets);
 		return testPlansList;
 	}
 	
+	//listOfAtemePresets
 	public static Vector<String> populateAteme(String ipAddr) throws JDOMException, IOException{
 		SAXBuilder sb = new SAXBuilder();
 		InputStream stream = new ByteArrayInputStream(RESTGetReturn("http://" + ipAddr + "/restapi/presets").getBytes("UTF-8"));
@@ -62,6 +70,8 @@ public class PopulateGUI {
 		return testPlansList;
 	}
 	
+	//listOfTestPlans
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static Vector<String> populateBaton(String ipAddr) throws JDOMException, IOException, XmlRpcException{
 	    XmlRpcClient baton = new XmlRpcClient("http://"+ipAddr+":8080");
 	    baton.setBasicAuthentication("admin", "admin");
@@ -70,6 +80,7 @@ public class PopulateGUI {
 	    return (Vector<String>) testPlans;
 	}
 	
+	//filter listOfAtemePresets
 	public static Vector<String> filterAteme(String filterText) throws JDOMException, IOException, XmlRpcException{
 		ArrayList<String> newListOfPresets = new ArrayList<String>();
 		for(int i = 0; i < listOfAtemePresets.size(); i++){
@@ -81,6 +92,7 @@ public class PopulateGUI {
         return presetsList;
 	}
 	
+	//filter listOfElementalPresets
 	public static Vector<String> filterElemental(String filterText) throws JDOMException, IOException, XmlRpcException{
 		ArrayList<String> newListOfPresets = new ArrayList<String>();
 		for(int i = 0; i < listOfElementalPresets.size(); i++){
@@ -92,6 +104,7 @@ public class PopulateGUI {
         return presetsList;
 	}
 	
+	//filter listOfTestPlans
 	public static Vector<String> filterBaton(String filterText) throws JDOMException, IOException, XmlRpcException{
 		ArrayList<String> newListOfPresets = new ArrayList<String>();
 		for(int i = 0; i < listOfTestPlans.size(); i++){
@@ -103,6 +116,7 @@ public class PopulateGUI {
         return presetsList;
 	}
 	
+	//listOfAtemePresets
 	public static Vector<String> folderPopulateAteme(){
 		atemeChooser.setCurrentDirectory(new File("\\\\isilonla3.vod.dtveng.net\\ifs\\ATEME"));
 		atemeChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -114,7 +128,7 @@ public class PopulateGUI {
 		return testPlansList;
     }
 	
-	private static void fileChooser(JFileChooser fileChoice) {
+	private static void fileChooser() {
 		atemeChooser.getActionMap().get("viewTypeDetails").actionPerformed(null);
 		atemeChooser.setDialogTitle("Choose Directory");
 		atemeChooser.setAcceptAllFileFilterUsed(false);
