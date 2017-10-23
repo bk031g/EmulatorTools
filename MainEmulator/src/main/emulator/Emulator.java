@@ -624,197 +624,15 @@ public class Emulator extends JFrame {
 		scrollPane_AtemePreset.setViewportView(list_AtemePreset);
 		atemePanel.setLayout(gl_panel_atemeMain);
 
-		fullQCPanel = new JPanel();
-		tabbedPane_1.addTab("Baton", null, fullQCPanel, null);
-
-		JScrollPane scrollPane_TestPlan = new JScrollPane();
-
-		list_TestPlan = new JList<String>();
-		scrollPane_TestPlan.setViewportView(list_TestPlan);
-		list_TestPlan.getAccessibleContext().setAccessibleName("Testplans");
-
-		label_BatonIP = new JLabel();
-		label_BatonIP.setText("Baton IP");
-
 		String[] BatonIP = { "10.26.78.45", "10.26.86.18" };
-		textField_BatonIP = new JComboBox<Object>(BatonIP);
-		textField_BatonIP.setEditable(true);
-
-		JButton btnBatonPopulate = new JButton();
-		btnBatonPopulate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					populateBaton();
-				} catch (JDOMException | IOException | XmlRpcException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		btnBatonPopulate.setText("Populate");
-
-		headerCheckPanel = new JPanel();
-		headerCheckPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-
-		chckbxManualTestplanEntry = new JCheckBox("Manual Test Plan Entry:");
-		chckbxManualTestplanEntry.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				if (chckbxManualTestplanEntry.isSelected()) {
-					textField_4.setEnabled(true);
-					list_TestPlan.setEnabled(false);
-					textField_BatonFilter.setEnabled(false);
-				} else {
-					textField_4.setEnabled(false);
-					list_TestPlan.setEnabled(true);
-					textField_BatonFilter.setEnabled(true);
-				}
-			}
-		});
-
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setEnabled(false);
-
-		JLabel BatonSearch = new JLabel();
-		BatonSearch.setText("Filter Test Plans:");
-
-		textField_BatonFilter = new JTextField();
-
-		textField_BatonFilter.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				filterTestPlans();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				filterTestPlans();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				filterTestPlans();
-			}
-
-		});
-		textField_BatonFilter.setColumns(10);
-
-		lblNewLabel = new JLabel("Job Priority");
 
 		String[] batonSpinnerValues = { "Low", "Normal", "High", "Urgent" };
 		SpinnerListModel batonSpinnerModel = new SpinnerListModel(
 				batonSpinnerValues);
-		spinner_2 = new JSpinner(batonSpinnerModel);
-
-		GroupLayout gl_panel_1 = new GroupLayout(fullQCPanel);
-            gl_panel_1.setHorizontalGroup(
-            	gl_panel_1.createParallelGroup(Alignment.LEADING)
-            		.addGroup(gl_panel_1.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-            				.addComponent(scrollPane_TestPlan, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
-            				.addGroup(gl_panel_1.createSequentialGroup()
-            					.addComponent(label_BatonIP, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addComponent(textField_BatonIP, 0, 408, Short.MAX_VALUE)
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addComponent(btnBatonPopulate, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
-            				.addComponent(headerCheckPanel, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)
-            				.addGroup(gl_panel_1.createSequentialGroup()
-            					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING, false)
-            						.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
-            							.addComponent(lblNewLabel)
-            							.addPreferredGap(ComponentPlacement.RELATED)
-            							.addComponent(spinner_2))
-            						.addComponent(chckbxManualTestplanEntry, Alignment.LEADING)
-            						.addComponent(BatonSearch, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-            						.addComponent(textField_BatonFilter, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-            						.addComponent(textField_4, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))))
-            			.addContainerGap())
-            );
-            gl_panel_1.setVerticalGroup(
-            	gl_panel_1.createParallelGroup(Alignment.LEADING)
-            		.addGroup(gl_panel_1.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(label_BatonIP)
-            				.addComponent(textField_BatonIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            				.addComponent(btnBatonPopulate))
-            			.addGap(10)
-            			.addComponent(scrollPane_TestPlan, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
-            			.addPreferredGap(ComponentPlacement.RELATED)
-            			.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(textField_BatonFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            				.addComponent(BatonSearch))
-            			.addGap(5)
-            			.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-            				.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            				.addComponent(chckbxManualTestplanEntry))
-            			.addGap(18)
-            			.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-            				.addComponent(spinner_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            				.addComponent(lblNewLabel))
-            			.addGap(59)
-            			.addComponent(headerCheckPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            			.addGap(57))
-            );
-
-		JLabel lblBatonHeaderIp = new JLabel();
-		lblBatonHeaderIp.setText("Baton Header IP:");
-
-		JLabel lblHeaderTestPlan = new JLabel();
-		lblHeaderTestPlan.setText("Header Test Plan:");
 
 		String[] BatonHeaderIP = { "10.26.78.45", "10.26.86.18" };
-		textField_BatonHeaderIP = new JComboBox<Object>(BatonHeaderIP);
-		textField_BatonHeaderIP.setEditable(true);
 
 		String[] HeaderTestPlans = { "CMS_Profiler", "CMS_Header_4K" };
-		txtCmsprofiler = new JComboBox<Object>(HeaderTestPlans);
-		txtCmsprofiler.setEditable(true);
-
-		JButton btnAdvancedSettings = new JButton("Advanced Settings");
-		GroupLayout gl_panel_3 = new GroupLayout(headerCheckPanel);
-            gl_panel_3.setHorizontalGroup(
-            	gl_panel_3.createParallelGroup(Alignment.LEADING)
-            		.addGroup(gl_panel_3.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-            				.addGroup(gl_panel_3.createSequentialGroup()
-            					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-            						.addComponent(lblHeaderTestPlan, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-            						.addComponent(lblBatonHeaderIp, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-            						.addComponent(textField_BatonHeaderIP, 0, 177, Short.MAX_VALUE)
-            						.addComponent(txtCmsprofiler, 0, 177, Short.MAX_VALUE))
-            					.addContainerGap())
-            				.addGroup(gl_panel_3.createSequentialGroup()
-            					.addComponent(btnAdvancedSettings, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
-            					.addGap(11))))
-            );
-            gl_panel_3.setVerticalGroup(
-            	gl_panel_3.createParallelGroup(Alignment.LEADING)
-            		.addGroup(gl_panel_3.createSequentialGroup()
-            			.addContainerGap()
-            			.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-            				.addComponent(textField_BatonHeaderIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            				.addComponent(lblBatonHeaderIp))
-            			.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-            				.addGroup(gl_panel_3.createSequentialGroup()
-            					.addGap(9)
-            					.addComponent(lblHeaderTestPlan))
-            				.addGroup(gl_panel_3.createSequentialGroup()
-            					.addPreferredGap(ComponentPlacement.RELATED)
-            					.addComponent(txtCmsprofiler, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-            			.addPreferredGap(ComponentPlacement.UNRELATED)
-            			.addComponent(btnAdvancedSettings)
-            			.addContainerGap(19, Short.MAX_VALUE))
-            );
-		headerCheckPanel.setLayout(gl_panel_3);
-		fullQCPanel.setLayout(gl_panel_1);
 
 		chckbxBatonHeader = new JCheckBox("Baton Header");
 		
@@ -1143,6 +961,188 @@ public class Emulator extends JFrame {
             list_ElementalPreset = new JList<String>();
             scrollPane_ElementalPreset.setViewportView(list_ElementalPreset);
 		elementalPanel.setLayout(gl_panel_7);
+		
+				fullQCPanel = new JPanel();
+				tabbedPane_1.addTab("Baton", null, fullQCPanel, null);
+				
+						JScrollPane scrollPane_TestPlan = new JScrollPane();
+						
+								list_TestPlan = new JList<String>();
+								scrollPane_TestPlan.setViewportView(list_TestPlan);
+								list_TestPlan.getAccessibleContext().setAccessibleName("Testplans");
+								
+										label_BatonIP = new JLabel();
+										label_BatonIP.setText("Baton IP");
+										textField_BatonIP = new JComboBox<Object>(BatonIP);
+										textField_BatonIP.setEditable(true);
+										
+												JButton btnBatonPopulate = new JButton();
+												btnBatonPopulate.addActionListener(new ActionListener() {
+													public void actionPerformed(ActionEvent arg0) {
+														try {
+															populateBaton();
+														} catch (JDOMException | IOException | XmlRpcException e) {
+															// TODO Auto-generated catch block
+															e.printStackTrace();
+														}
+													}
+												});
+												btnBatonPopulate.setText("Populate");
+												
+														headerCheckPanel = new JPanel();
+														headerCheckPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+														
+																chckbxManualTestplanEntry = new JCheckBox("Manual Test Plan Entry:");
+																chckbxManualTestplanEntry.addChangeListener(new ChangeListener() {
+																	public void stateChanged(ChangeEvent arg0) {
+																		if (chckbxManualTestplanEntry.isSelected()) {
+																			textField_4.setEnabled(true);
+																			list_TestPlan.setEnabled(false);
+																			textField_BatonFilter.setEnabled(false);
+																		} else {
+																			textField_4.setEnabled(false);
+																			list_TestPlan.setEnabled(true);
+																			textField_BatonFilter.setEnabled(true);
+																		}
+																	}
+																});
+																
+																		textField_4 = new JTextField();
+																		textField_4.setColumns(10);
+																		textField_4.setEnabled(false);
+																		
+																				JLabel BatonSearch = new JLabel();
+																				BatonSearch.setText("Filter Test Plans:");
+																				
+																						textField_BatonFilter = new JTextField();
+																						
+																								textField_BatonFilter.getDocument().addDocumentListener(new DocumentListener() {
+																									@Override
+																									public void insertUpdate(DocumentEvent e) {
+																										filterTestPlans();
+																									}
+																						
+																									@Override
+																									public void removeUpdate(DocumentEvent e) {
+																										filterTestPlans();
+																									}
+																						
+																									@Override
+																									public void changedUpdate(DocumentEvent e) {
+																										filterTestPlans();
+																									}
+																						
+																								});
+																								textField_BatonFilter.setColumns(10);
+																								
+																										lblNewLabel = new JLabel("Job Priority");
+																										spinner_2 = new JSpinner(batonSpinnerModel);
+																										
+																												GroupLayout gl_panel_1 = new GroupLayout(fullQCPanel);
+																												gl_panel_1.setHorizontalGroup(
+																													gl_panel_1.createParallelGroup(Alignment.LEADING)
+																														.addGroup(gl_panel_1.createSequentialGroup()
+																															.addContainerGap()
+																															.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+																																.addComponent(scrollPane_TestPlan, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+																																.addGroup(gl_panel_1.createSequentialGroup()
+																																	.addComponent(label_BatonIP, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+																																	.addPreferredGap(ComponentPlacement.RELATED)
+																																	.addComponent(textField_BatonIP, 0, 408, Short.MAX_VALUE)
+																																	.addPreferredGap(ComponentPlacement.RELATED)
+																																	.addComponent(btnBatonPopulate, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+																																.addComponent(headerCheckPanel, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)
+																																.addGroup(gl_panel_1.createSequentialGroup()
+																																	.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING, false)
+																																		.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
+																																			.addComponent(lblNewLabel)
+																																			.addPreferredGap(ComponentPlacement.RELATED)
+																																			.addComponent(spinner_2))
+																																		.addComponent(chckbxManualTestplanEntry, Alignment.LEADING)
+																																		.addComponent(BatonSearch, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+																																	.addPreferredGap(ComponentPlacement.RELATED)
+																																	.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+																																		.addComponent(textField_BatonFilter, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+																																		.addComponent(textField_4, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))))
+																															.addContainerGap())
+																												);
+																												gl_panel_1.setVerticalGroup(
+																													gl_panel_1.createParallelGroup(Alignment.LEADING)
+																														.addGroup(gl_panel_1.createSequentialGroup()
+																															.addContainerGap()
+																															.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+																																.addComponent(label_BatonIP)
+																																.addComponent(textField_BatonIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																																.addComponent(btnBatonPopulate))
+																															.addGap(10)
+																															.addComponent(scrollPane_TestPlan, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
+																															.addPreferredGap(ComponentPlacement.RELATED)
+																															.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+																																.addComponent(textField_BatonFilter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																																.addComponent(BatonSearch))
+																															.addGap(5)
+																															.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+																																.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																																.addComponent(chckbxManualTestplanEntry))
+																															.addGap(18)
+																															.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+																																.addComponent(spinner_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																																.addComponent(lblNewLabel))
+																															.addGap(59)
+																															.addComponent(headerCheckPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																															.addGap(57))
+																												);
+																												
+																														JLabel lblBatonHeaderIp = new JLabel();
+																														lblBatonHeaderIp.setText("Baton Header IP:");
+																														
+																																JLabel lblHeaderTestPlan = new JLabel();
+																																lblHeaderTestPlan.setText("Header Test Plan:");
+																																textField_BatonHeaderIP = new JComboBox<Object>(BatonHeaderIP);
+																																textField_BatonHeaderIP.setEditable(true);
+																																txtCmsprofiler = new JComboBox<Object>(HeaderTestPlans);
+																																txtCmsprofiler.setEditable(true);
+																																
+																																		JButton btnAdvancedSettings = new JButton("Advanced Settings");
+																																		GroupLayout gl_panel_3 = new GroupLayout(headerCheckPanel);
+																																		gl_panel_3.setHorizontalGroup(
+																																			gl_panel_3.createParallelGroup(Alignment.LEADING)
+																																				.addGroup(gl_panel_3.createSequentialGroup()
+																																					.addContainerGap()
+																																					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+																																						.addGroup(gl_panel_3.createSequentialGroup()
+																																							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+																																								.addComponent(lblHeaderTestPlan, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+																																								.addComponent(lblBatonHeaderIp, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
+																																							.addPreferredGap(ComponentPlacement.RELATED)
+																																							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+																																								.addComponent(textField_BatonHeaderIP, 0, 177, Short.MAX_VALUE)
+																																								.addComponent(txtCmsprofiler, 0, 177, Short.MAX_VALUE))
+																																							.addContainerGap())
+																																						.addGroup(gl_panel_3.createSequentialGroup()
+																																							.addComponent(btnAdvancedSettings, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+																																							.addGap(11))))
+																																		);
+																																		gl_panel_3.setVerticalGroup(
+																																			gl_panel_3.createParallelGroup(Alignment.LEADING)
+																																				.addGroup(gl_panel_3.createSequentialGroup()
+																																					.addContainerGap()
+																																					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+																																						.addComponent(textField_BatonHeaderIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+																																						.addComponent(lblBatonHeaderIp))
+																																					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+																																						.addGroup(gl_panel_3.createSequentialGroup()
+																																							.addGap(9)
+																																							.addComponent(lblHeaderTestPlan))
+																																						.addGroup(gl_panel_3.createSequentialGroup()
+																																							.addPreferredGap(ComponentPlacement.RELATED)
+																																							.addComponent(txtCmsprofiler, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+																																					.addPreferredGap(ComponentPlacement.UNRELATED)
+																																					.addComponent(btnAdvancedSettings)
+																																					.addContainerGap(19, Short.MAX_VALUE))
+																																		);
+																																		headerCheckPanel.setLayout(gl_panel_3);
+																																		fullQCPanel.setLayout(gl_panel_1);
 		jobCreationPanel.setLayout(gl_jobCreationPanel);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(tabbedPane);
@@ -1392,7 +1392,6 @@ public class Emulator extends JFrame {
 						selectedPresets = list_ElementalPreset.getSelectedValuesList();
 					
 					String jobPriority = ((String) spinner_1.getValue()).toLowerCase();
-					System.out.println(jobPriority);
 					
 					for (String Preset : selectedPresets) {
 						
@@ -1406,15 +1405,18 @@ public class Emulator extends JFrame {
 							singleHeaderCheck = false;
 						}
 						
+						initConductor.setElementalTCEnabled(true);
+						initConductor.elementalTC.setJobPriority(jobPriority);
+						
 						if(isElementalProfile){
 							
-							initConductor.setElementalTCEnabled(true);
+							initConductor.elementalTC.setIsElementalProfile(true);
 							
 							//Gather and clean all inputs
 							String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")";
 							String ipAddr = (String) textField_ElementalIP.getSelectedItem();
+							
 							String jobInput = (startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1))).replace("\\", "/");
-							System.out.println(jobInput);
 							String jobProfile = PopulateGUI.elementalProfilesHMap.get(Preset);
 							String outputFolder = textField_ElementalOutput.getText();
 							String jobOutput;
@@ -1425,10 +1427,30 @@ public class Emulator extends JFrame {
 							else 
 								jobOutput = (outputFolder + "\\" + textField_1.getText()+".ts").replace("\\", "/");
 							
-							System.out.println(ipAddr);
+							initConductor.elementalTC.setIpAddr(ipAddr);
+							initConductor.elementalTC.setJobInput(jobInput);
+							initConductor.elementalTC.setJobOutput(jobOutput);
+							initConductor.elementalTC.setJobProfile(jobProfile);
+						}
+						else{
+							
+							initConductor.elementalTC.setIsElementalProfile(false);
+							
+							//Gather and clean all inputs
+							String fillerName = iterateDirectory.substring(iterateDirectory.lastIndexOf("\\") + 1,iterateDirectory.lastIndexOf("."))+ "(" + Preset + ")";
+							String ipAddr = (String) textField_ElementalIP.getSelectedItem();
+							String jobInput = (startingDirectory + iterateDirectory.substring(iterateDirectory.indexOf("\\",iterateDirectory.indexOf("\\") + 1))).replace("\\", "/");
 							System.out.println(jobInput);
-							System.out.println(jobOutput);
-							System.out.println(jobProfile);
+							String jobProfile = Preset;
+							String outputFolder = textField_ElementalOutput.getText();
+							String jobOutput;
+							if (textField_ElementalOutput.getText().endsWith("\\"))
+								outputFolder = textField_ElementalOutput.getText().substring(0, textField_ElementalOutput.getText().length() - 1);
+							if(textField_1.getText().trim().equals(""))
+								jobOutput = (outputFolder + "\\" + fillerName).replace("\\", "/");
+							else 
+								jobOutput = (outputFolder + "\\" + textField_1.getText()+".ts").replace("\\", "/");
+							
 							initConductor.elementalTC.setIpAddr(ipAddr);
 							initConductor.elementalTC.setJobInput(jobInput);
 							initConductor.elementalTC.setJobOutput(jobOutput);
