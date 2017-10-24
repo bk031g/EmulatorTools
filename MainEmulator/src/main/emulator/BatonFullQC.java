@@ -22,6 +22,12 @@ public class BatonFullQC {
 	@SuppressWarnings("deprecation")
 	public void run() throws XmlRpcException, IOException {
 		
+		System.out.println(TestPlan);
+		System.out.println(TestPlanVersion);
+		System.out.println(Priority);
+		System.out.println(selectedDirectory);
+		System.out.println(ipAddr);
+		
 		for (int i = 0; i < jobCount; i++){
 			Vector<String> verifyFileParams = new Vector<String>();
 			baton = new XmlRpcClient("http://" + ipAddr.get(i) + ":8080");
